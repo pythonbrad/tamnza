@@ -5,6 +5,7 @@
 */
 
 require_once("settings.php");
+require_once(BASE_DIR . "core/router/conf.php");
 
 // ------- Vendor modules ------------
 
