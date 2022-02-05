@@ -12,9 +12,17 @@ define('DEBUG', true);
 
 # Database
 define('DATABASES', array(
-    'default' => array(
+    /*'default' => array(
         'ENGINE' => 'sqlite',
         'NAME' => BASE_DIR . 'database.sqlite3'
+    ),*/
+    'default' => array(
+        'ENGINE' => 'mysql',
+        'NAME' => 'tamnza',
+        'HOST' => '0.0.0.0',
+        'PORT' => '3306',
+        'USERNAME' => 'root',
+        'PASSWORD' => 'pass',
     ),
 ));
 
