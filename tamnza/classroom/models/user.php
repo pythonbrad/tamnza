@@ -1,6 +1,6 @@
 <?php
 
-namespace Tamnza\App\Classroom;
+namespace Tamnza\App\Classroom\Model;
 
 class User
 {
