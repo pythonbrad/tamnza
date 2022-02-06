@@ -33,7 +33,7 @@ class BaseDAO
         $this->fieldsVerification($fields);
 
         // We build the query
-        $sql = 'INSERT INTO ' . $this->tb_name . '(' . $this->pk . ', ' . join(', ', array_keys($fields)) . ') VALUES (null, ' . trim(str_repeat('?,', count($fields)), ',') . ');';
+        $sql = 'INSERT INTO ' . $this->tb_name . '(' . join(',', array_keys($fields)) . ') VALUES (' . trim(str_repeat('?,', count($fields)), ',') . ');';
 
         // We execute the query
         $this->db->prepare($sql)->execute(array_values($fields));
@@ -48,15 +48,17 @@ class BaseDAO
     {
         $this->fieldsVerification($fields);
 
-        // We build the query
-        $sql = 'UPDATE ' . $this->tb_name . ' SET ' . $this->pk . "=$id,";
+        if (count($fields) > 0) {
+            // We build the query
+            $sql = 'UPDATE ' . $this->tb_name . ' SET ';
 
-        $sql .= join('=?,', array_keys($fields)) . '=?';
+            $sql .= join('=?,', array_keys($fields)) . '=?';
 
-        $sql = trim($sql, ',') . ' WHERE ' . $this->pk . '=' . $id . ';';
+            $sql = trim($sql, ',') . ' WHERE ' . $this->pk . '=' . $id . ';';
 
-        // We execute the query
-        $this->db->prepare($sql)->execute(array_values($fields));
+            // We execute the query
+            $this->db->prepare($sql)->execute(array_values($fields));
+        }
     }
 
     public function select(array $fields, int $limit): array
@@ -81,6 +83,9 @@ class BaseDAO
         $stmt =  $this->db->prepare($sql);
         $stmt->execute(array_values($fields));
 
+        // We will got an error if the data are too large
+        // https://stackoverflow.com/questions/33250453/how-to-solve-general-error-2006-mysql-server-has-gone-away
+        // a temporary solution is to use limit
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
