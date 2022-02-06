@@ -6,7 +6,7 @@ class Student
 {
     private int $id = 0;
 
-    public function __construct(public User $user)
+    public function __construct(public User|null $user = null)
     {
         // We config the dao
         $this->dao = new \Tamnza\Database\BaseDAO(
