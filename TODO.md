@@ -6,14 +6,32 @@
 	- [ ] Build the models
 		- [ ] User model
 			- [x] CRUD
-			- [ ] Quizzes attribute
-			- [ ] Student attribute
+			- [ ] quizzes attribute
+			- [ ] student attribute
 		- [ ] Subject model
+			- [x] CRUD
+			- [ ] quizzes attribute
+			- [ ] interested_students attribute
 		- [ ] Student model
+			- [x] CRUD
+			- [ ] interests (subject) attribute
+			- [ ] quiz_answers attribute
+			- [ ] taken_quizzes attribute
 		- [ ] Quiz model
+			- [ ] CRUD
+			- [ ] owner (user) attribute
+			- [ ] questions attribute
+			- [ ] subject attribute
+			- [ ] taken_quizzes (student) attribute
 		- [ ] Question model
+			- [ ] CRUD attribute
+			- [ ] answers attribute
+			- [ ] quiz attribute
 		- [ ] Answer model
+			- [ ] CRUD attribute
+			- [ ] question attribute
 	- [ ] Build the routers
 		- [x] Base
+		- [ ] Improvement
 	+ [ ] Build the controllers
 	+ [ ] Build the views
