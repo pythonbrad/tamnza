@@ -18,7 +18,7 @@
 			- [ ] quiz_answers attribute
 			- [ ] taken_quizzes attribute
 		- [ ] Quiz model
-			- [ ] CRUD
+			- [x] CRUD
 			- [ ] owner (user) attribute
 			- [ ] questions attribute
 			- [ ] subject attribute
