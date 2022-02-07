@@ -53,8 +53,8 @@ class Quiz
             array(
                 'id' => $id,
                 'name' => $name,
-                'owner_id' => $owner->getID(),
-                'subject_id' => $subject->getID(),
+                'owner_id' => $owner?->getID(),
+                'subject_id' => $subject?->getID(),
             ),
             $limit
         );
