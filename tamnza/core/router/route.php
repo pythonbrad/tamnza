@@ -14,7 +14,7 @@ class Route
 
     public function __construct(string $path, callable $callable, $name = null)
     {
-        $this->path = trim($path, ('/'));
+        $this->path = rtrim($path, '/');
         $this->callable = $callable;
         $this->name = $name;
     }
@@ -25,7 +25,7 @@ class Route
      **/
     public function match(string $url): bool
     {
-        $url = trim($url, '/');
+        $url = rtrim($url, '/');
 
         // /posts/<id:int>
         $path = preg_replace('#<(\w+):int>#', '([0-9]+)', $this->path);
@@ -52,7 +52,7 @@ class Route
         $path = $this->path;
 
         foreach ($params as $k => $v) {
-            $path = preg_replace("#<$k(:\w+)?>#", $v, $path);
+            $path = preg_replace("#<$k(:\w+)?>#", sprintf("%s", $v), $path);
         }
 
         return $path;
