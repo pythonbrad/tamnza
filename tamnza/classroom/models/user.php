@@ -54,7 +54,7 @@ class User
         }
     }
 
-    public function save(): void
+    public function save(): bool
     {
         $fields = array(
             'username' => $this->username,
@@ -72,8 +72,9 @@ class User
         // If is already created, we update
         if ($this->id == 0) {
             $this->id = $this->dao->insert($fields);
+            return $this->id != 0;
         } else {
-            $this->dao->update($this->id, $fields);
+            return $this->dao->update($this->id, $fields);
         }
     }
 
@@ -123,8 +124,8 @@ class User
         }
     }
 
-    public function delete(): void
+    public function delete(): bool
     {
-        $this->dao->delete($this->id);
+        return $this->dao->delete($this->id);
     }
 }

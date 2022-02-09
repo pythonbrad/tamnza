@@ -44,7 +44,7 @@ class BaseDAO
         return $this->db->query($sql)->fetch()[0];
     }
 
-    public function update(int $id, array $fields): void
+    public function update(int $id, array $fields): bool
     {
         $this->fieldsVerification($fields);
 
@@ -57,8 +57,10 @@ class BaseDAO
             $sql = trim($sql, ',') . ' WHERE ' . $this->pk . '=' . $id . ';';
 
             // We execute the query
-            $this->db->prepare($sql)->execute(array_values($fields));
+            return $this->db->prepare($sql)->execute(array_values($fields));
         }
+
+        return false;
     }
 
     public function select(array $fields, int $limit): array
@@ -93,6 +95,6 @@ class BaseDAO
     {
         // We build the query
         $sql = 'DELETE FROM ' . $this->tb_name . ' WHERE ' . $this->pk . '=' . $id . ';';
-        $this->db->query($sql);
+        return $this->db->prepare($sql)->execute();
     }
 }

@@ -30,7 +30,7 @@ class Student
         }
     }
 
-    public function save()
+    public function save(): bool
     {
         $fields = array('user_id' => $this->user->getID());
 
@@ -38,8 +38,9 @@ class Student
         if ($this->id == 0) {
             $this->dao->insert($fields);
             $this->id = $fields['user_id'];
+            return $this->id;
         } else {
-            $this->dao->update($this->id, $fields);
+            return $this->dao->update($this->id, $fields);
         }
     }
 
@@ -75,8 +76,8 @@ class Student
         }
     }
 
-    public function delete(): void
+    public function delete(): bool
     {
-        $this->dao->delete($this->id);
+        return $this->dao->delete($this->id);
     }
 }

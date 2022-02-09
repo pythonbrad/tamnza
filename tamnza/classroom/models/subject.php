@@ -32,15 +32,16 @@ class Subject
         }
     }
 
-    public function save()
+    public function save(): bool
     {
         $fields = array('name' => $this->name, 'color' => $this->color);
 
         // If is already created, we update
         if ($this->id == 0) {
             $this->id = $this->dao->insert($fields);
+            return $this->id;
         } else {
-            $this->dao->update($this->id, $fields);
+            return $this->dao->update($this->id, $fields);
         }
     }
 
@@ -82,8 +83,8 @@ class Subject
         }
     }
 
-    public function delete(): void
+    public function delete(): bool
     {
-        $this->dao->delete($this->id);
+        return $this->dao->delete($this->id);
     }
 }

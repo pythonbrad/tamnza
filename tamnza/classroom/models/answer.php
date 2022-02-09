@@ -33,15 +33,16 @@ class Answer
         }
     }
 
-    public function save()
+    public function save(): bool
     {
         $fields = array('text' => $this->text, 'is_correct' => $this->is_correct ? 1 : 0, 'question_id' => $this->question->getID());
 
         // If is already created, we update
         if ($this->id == 0) {
             $this->id = $this->dao->insert($fields);
+            return $this->id;
         } else {
-            $this->dao->update($this->id, $fields);
+            return $this->dao->update($this->id, $fields);
         }
     }
 
@@ -85,8 +86,8 @@ class Answer
         }
     }
 
-    public function delete(): void
+    public function delete(): bool
     {
-        $this->dao->delete($this->id);
+        return $this->dao->delete($this->id);
     }
 }
