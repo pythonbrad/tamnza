@@ -10,7 +10,7 @@
 			- [ ] quizzes attribute
 			- [ ] student attribute
 		- [ ] Subject model
-			- [ ] unit test
+			- [x] unit test
 			- [x] CRUD
 			- [ ] quizzes attribute
 			- [ ] interested_students attribute
