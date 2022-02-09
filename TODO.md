@@ -5,7 +5,7 @@
 		- [x] Write a base DAO
 	- [ ] Build the models
 		- [ ] User model
-			- [ ] unit test
+			- [x] unit test
 			- [x] CRUD
 			- [ ] quizzes attribute
 			- [ ] student attribute
