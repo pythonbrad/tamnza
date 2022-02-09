@@ -15,7 +15,7 @@
 			- [ ] quizzes attribute
 			- [ ] interested_students attribute
 		- [ ] Student model
-			- [ ] unit test
+			- [x] unit test
 			- [x] CRUD
 			- [ ] interests (subject) attribute
 			- [ ] quiz_answers attribute
