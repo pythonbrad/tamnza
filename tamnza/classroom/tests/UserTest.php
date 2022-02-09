@@ -37,13 +37,14 @@ final class UserTest extends TestCase
 
         $user_copy = \Tamnza\App\Classroom\Model\User::getByID($user->getID());
 
-        // we ignore the small diffrence of time
-        if ($user->date_joined->getTimestamp() - $user->last_login->getTimestamp() < 1) {
-            $user_copy->last_login = $user->last_login;
-            $user_copy->date_joined = $user->date_joined;
-        }
-
-        $this->assertEquals($user, $user_copy);
+        $this->assertEquals($user->date_joined->getTimestamp(), $user->last_login->getTimestamp());
+        $this->assertEquals($user->username, $user_copy->username);
+        $this->assertEquals($user->first_name, $user_copy->first_name);
+        $this->assertEquals($user->last_name, $user_copy->last_name);
+        $this->assertEquals($user->email, $user_copy->email);
+        $this->assertEquals($user->password, $user_copy->password);
+        $this->assertEquals($user->is_student, $user_copy->is_student);
+        $this->assertEquals($user->is_teacher, $user_copy->is_teacher);
     }
 
     public function testDelete(): void
