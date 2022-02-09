@@ -29,7 +29,7 @@
 			- [x] subject attribute
 			- [ ] taken_quizzes (student) attribute
 		- [ ] Question model
-			- [ ] unit test
+			- [x] unit test
 			- [x] CRUD attribute
 			- [ ] answers attribute
 			- [x] quiz attribute
