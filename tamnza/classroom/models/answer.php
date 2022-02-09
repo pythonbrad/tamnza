@@ -48,13 +48,13 @@ class Answer
 
     public static function search(int $id = null, string $text = null, bool $is_correct = null, Question $question = null, int $limit = -1): array
     {
-        $question = new Answer();
+        $answer = new Answer();
 
-        $data = $question->dao->select(
+        $data = $answer->dao->select(
             array(
                 'id' => $id,
                 'text' => $text,
-                'is_correct' => $is_correct ? 1 : 0,
+                'is_correct' => is_null($is_correct) ? null : ($is_correct ? 1 : 0),
                 'question_id' => $question?->getID(),
             ),
             $limit
@@ -64,12 +64,12 @@ class Answer
         $result = array();
 
         foreach ($data as $record) {
-            $question = new Answer(text: $record['text'], is_correct: $record['is_correct']);
+            $answer = new Answer(text: $record['text'], is_correct: $record['is_correct']);
 
-            $question->setID($record['id']);
-            $question->question = Question::getByID($record['question_id']);
+            $answer->setID($record['id']);
+            $answer->question = Question::getByID($record['question_id']);
 
-            $result[] = $question;
+            $result[] = $answer;
         }
 
         return $result;
