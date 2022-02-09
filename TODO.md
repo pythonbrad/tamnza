@@ -22,7 +22,7 @@
 			- [ ] taken_quizzes attribute
 			- [x] user attribute
 		- [ ] Quiz model
-			- [ ] unit test
+			- [x] unit test
 			- [x] CRUD
 			- [x] owner (user) attribute
 			- [ ] questions attribute
