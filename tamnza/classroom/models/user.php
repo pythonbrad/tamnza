@@ -90,9 +90,9 @@ class User
                 'last_name' => $last_name,
                 'email' => $email,
                 'password' => $password,
-                'is_student' => $is_student ? 1 : 0,
-                'is_teacher' => $is_teacher ? 1 : 0,
-                'is_active' => $is_active ? 1 : 0,
+                'is_student' => is_null($is_student) ? null : ($is_student ? 1 : 0),
+                'is_teacher' => is_null($is_teacher) ? null : ($is_teacher ? 1 : 0),
+                'is_active' => is_null($is_active) ? null : ($is_active ? 1 : 0),
             ),
             $limit
         );
