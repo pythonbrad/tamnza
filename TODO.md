@@ -12,8 +12,10 @@
 		- [ ] Subject model
 			- [x] unit test
 			- [x] CRUD
-			- [ ] quizzes attribute
-			- [ ] interested_students attribute
+			- [x] quizzes attribute
+			- [x] interested_students attribute
+		- [ ] Interested model
+			- 
 		- [ ] Student model
 			- [x] unit test
 			- [x] CRUD
@@ -41,5 +43,7 @@
 		- [x] Base
 		- [x] unit test
 		- [ ] Improvement
+	- [ ] Core
+		- [ ] Write an error management using OOP
 	+ [ ] Build the controllers
 	+ [ ] Build the views
