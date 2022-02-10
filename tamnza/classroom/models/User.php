@@ -2,8 +2,8 @@
 
 namespace Tamnza\App\Classroom\Model;
 
-require_once('student.php');
-require_once('quiz.php');
+require_once('Student.php');
+require_once('Quiz.php');
 
 class User
 {

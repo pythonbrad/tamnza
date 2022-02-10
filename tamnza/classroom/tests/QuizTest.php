@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once(dirname(__FILE__) . '/../../tamnza/database.php');
 require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
-require_once(dirname(__FILE__) . '/../models/quiz.php');
+require_once(dirname(__FILE__) . '/../models/Quiz.php');
 require_once('UserTest.php');
 require_once('SubjectTest.php');
 

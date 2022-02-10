@@ -2,21 +2,22 @@
 
 namespace Tamnza\App\Classroom\Model;
 
-require_once('interested_student.php');
+require_once('Question.php');
 
-class Subject
+class Answer
 {
     private int $id = 0;
 
     public function __construct(
-        public string $name = '',
-        public string $color = '',
+        public string $text = '',
+        public bool $is_correct = false,
+        public Question|null $question = null,
     ) {
         // We config the dao
         $this->dao = new \Tamnza\Database\BaseDAO(
-            'classroom_subject',
+            'classroom_answer',
             'id',
-            array('name', 'color'),
+            array('text', 'is_correct', 'question_id'),
         );
     }
 
@@ -34,19 +35,9 @@ class Subject
         }
     }
 
-    // We will manipulate special attributes
-    public function __get(string $key): array
-    {
-        return match ($key) {
-            'quizzes' => Quiz::search(subject: $this),
-            'interested_students' => InterestedStudent::search(subject: $this),
-            default => throw new \Exception("$key is not a special attribute"),
-        };
-    }
-
     public function save(): bool
     {
-        $fields = array('name' => $this->name, 'color' => $this->color);
+        $fields = array('text' => $this->text, 'is_correct' => $this->is_correct ? 1 : 0, 'question_id' => $this->question->getID());
 
         // If is already created, we update
         if ($this->id == 0) {
@@ -57,36 +48,38 @@ class Subject
         }
     }
 
-    public static function search(int $id = null, string $name = null, string $color = null, int $limit = -1): array
+    public static function search(int $id = null, string $text = null, bool $is_correct = null, Question $question = null, int $limit = -1): array
     {
-        $subject = new Subject();
+        $answer = new Answer();
 
-        $data = $subject->dao->select(
+        $data = $answer->dao->select(
             array(
                 'id' => $id,
-                'name' => $name,
-                'color' => $color,
+                'text' => $text,
+                'is_correct' => is_null($is_correct) ? null : ($is_correct ? 1 : 0),
+                'question_id' => $question?->getID(),
             ),
             $limit
         );
 
-        // We convert data in array of subjects
+        // We convert data in array of answers
         $result = array();
 
         foreach ($data as $record) {
-            $subject = new Subject(name: $record['name'], color: $record['color']);
+            $answer = new Answer(text: $record['text'], is_correct: $record['is_correct']);
 
-            $subject->setID($record['id']);
+            $answer->setID($record['id']);
+            $answer->question = Question::getByID($record['question_id']);
 
-            $result[] = $subject;
+            $result[] = $answer;
         }
 
         return $result;
     }
 
-    public static function getByID(int $id): Subject|null
+    public static function getByID(int $id): Answer|null
     {
-        $result = Subject::search(id: $id, limit: 1);
+        $result = Answer::search(id: $id, limit: 1);
 
         if (count($result) > 0) {
             return $result[0];

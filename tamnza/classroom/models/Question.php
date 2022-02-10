@@ -2,23 +2,21 @@
 
 namespace Tamnza\App\Classroom\Model;
 
-require_once('user.php');
-require_once('subject.php');
+require_once('Quiz.php');
 
-class Quiz
+class Question
 {
     private int $id = 0;
 
     public function __construct(
-        public string $name = '',
-        public User|null $owner = null,
-        public Subject|null $subject = null,
+        public string $text = '',
+        public Quiz|null $quiz = null,
     ) {
         // We config the dao
         $this->dao = new \Tamnza\Database\BaseDAO(
-            'classroom_quiz',
+            'classroom_question',
             'id',
-            array('name', 'owner_id', 'subject_id'),
+            array('text', 'quiz_id'),
         );
     }
 
@@ -38,50 +36,48 @@ class Quiz
 
     public function save(): bool
     {
-        $fields = array('name' => $this->name, 'owner_id' => $this->owner->getID(), 'subject_id' => $this->subject->getID());
+        $fields = array('text' => $this->text, 'quiz_id' => $this->quiz->getID());
 
         // If is already created, we update
         if ($this->id == 0) {
             $this->id = $this->dao->insert($fields);
-            return  $this->id;
+            return $this->id;
         } else {
             return $this->dao->update($this->id, $fields);
         }
     }
 
-    public static function search(int $id = null, string $name = null, User $owner = null, Subject $subject = null, int $limit = -1): array
+    public static function search(int $id = null, string $text = null, Quiz $quiz = null, int $limit = -1): array
     {
-        $quiz = new Quiz();
+        $question = new Question();
 
-        $data = $quiz->dao->select(
+        $data = $question->dao->select(
             array(
                 'id' => $id,
-                'name' => $name,
-                'owner_id' => $owner?->getID(),
-                'subject_id' => $subject?->getID(),
+                'text' => $text,
+                'quiz_id' => $quiz?->getID(),
             ),
             $limit
         );
 
-        // We convert data in array of quizzes
+        // We convert data in array of questions
         $result = array();
 
         foreach ($data as $record) {
-            $quiz = new Quiz(name: $record['name']);
+            $question = new Question(text: $record['text']);
 
-            $quiz->setID($record['id']);
-            $quiz->owner = User::getByID($record['owner_id']);
-            $quiz->subject = Subject::getByID($record['subject_id']);
+            $question->setID($record['id']);
+            $question->quiz = Quiz::getByID($record['quiz_id']);
 
-            $result[] = $quiz;
+            $result[] = $question;
         }
 
         return $result;
     }
 
-    public static function getByID(int $id): Quiz|null
+    public static function getByID(int $id): Question|null
     {
-        $result = Quiz::search(id: $id, limit: 1);
+        $result = Question::search(id: $id, limit: 1);
 
         if (count($result) > 0) {
             return $result[0];

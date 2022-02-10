@@ -2,8 +2,8 @@
 
 namespace Tamnza\App\Classroom\Model;
 
-require_once('student.php');
-require_once('subject.php');
+require_once('Student.php');
+require_once('Subject.php');
 
 // Relationship between student and subject
 class InterestedStudent
