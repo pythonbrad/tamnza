@@ -45,4 +45,25 @@ final class StudentTest extends TestCase
 
         $this->assertEquals($student->delete(), true);
     }
+
+    public function testGetInterests(): void
+    {
+        $student = $this->testCreate();
+
+        $this->assertIsArray($student->interests);
+    }
+
+    public function testGetQuizAnswers(): void
+    {
+        $student = $this->testCreate();
+
+        $this->assertIsArray($student->quiz_answers);
+    }
+
+    public function testGetTakenQuizzes(): void
+    {
+        $student = $this->testCreate();
+
+        $this->assertIsArray($student->taken_quizzes);
+    }
 }
