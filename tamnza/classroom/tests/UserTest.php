@@ -53,4 +53,18 @@ final class UserTest extends TestCase
 
         $this->assertEquals($user->delete(), true);
     }
+
+    public function testGetQuizzes(): void
+    {
+        $user = $this->testCreate();
+
+        $this->assertIsArray($user->quizzes);
+    }
+
+    public function getStudent(): void
+    {
+        $user = $this->testCreate();
+
+        $this->assertEquals($user->getID(), $user->student->user->getID());
+    }
 }

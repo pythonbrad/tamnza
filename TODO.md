@@ -7,8 +7,8 @@
 		- [ ] User model
 			- [x] unit test
 			- [x] CRUD
-			- [ ] quizzes attribute
-			- [ ] student attribute
+			- [x] quizzes attribute
+			- [x] student attribute
 		- [ ] Subject model
 			- [x] unit test
 			- [x] CRUD
@@ -33,8 +33,8 @@
 			- [x] CRUD attribute
 			- [ ] answers attribute
 			- [x] quiz attribute
-		- [ ] Answer model
-			- [ ] unit test
+		- [x] Answer model
+			- [x] unit test
 			- [x] CRUD attribute
 			- [x] question attribute
 	- [ ] Build the routers
