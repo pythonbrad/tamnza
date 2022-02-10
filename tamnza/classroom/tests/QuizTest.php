@@ -52,4 +52,18 @@ final class QuizTest extends TestCase
 
         $this->assertEquals($quiz->delete(), true);
     }
+
+    public function testGetQuestions(): void
+    {
+        $quiz = $this->testCreate();
+
+        $this->assertIsArray($quiz->questions);
+    }
+
+    public function testGetTakenQuizzes(): void
+    {
+        $quiz = $this->testCreate();
+
+        $this->assertIsArray($quiz->taken_quizzes);
+    }
 }

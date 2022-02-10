@@ -4,6 +4,8 @@ namespace Tamnza\App\Classroom\Model;
 
 require_once('User.php');
 require_once('Subject.php');
+require_once('Quiz.php');
+require_once('Question.php');
 
 class Quiz
 {
@@ -34,6 +36,16 @@ class Quiz
         } else {
             throw new \Exception("You cannot assign an id, this object is sync with the database");
         }
+    }
+
+    // We will manipulate special attributes
+    public function __get(string $key): array
+    {
+        return match ($key) {
+            'questions' => Question::search(quiz: $this),
+            'taken_quizzes' => TakenQuiz::search(quiz: $this),
+            default => throw new \Exception("$key is not a special attribute"),
+        };
     }
 
     public function save(): bool
