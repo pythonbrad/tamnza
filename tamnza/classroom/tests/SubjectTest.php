@@ -47,4 +47,12 @@ final class SubjectTest extends TestCase
 
         $this->assertEquals($subject->delete(), true);
     }
+
+    public function testGetQuizzes(): void
+    {
+        $subject = $this->testCreate();
+
+        $this->assertIsArray($subject->quizzes);
+        $this->assertIsArray($subject->interested_students);
+    }
 }
