@@ -49,4 +49,11 @@ final class QuestionTest extends TestCase
 
         $this->assertEquals($question->delete(), true);
     }
+
+    public function testGetAnswers(): void
+    {
+        $question = $this->testCreate();
+
+        $this->assertIsArray($question->answers);
+    }
 }
