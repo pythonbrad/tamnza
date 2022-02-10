@@ -40,7 +40,7 @@ final class InterestedStudentTest extends TestCase
 
         $this->assertEquals($interested_student->getID(), $interested_student_copy->getID());
         $this->assertEquals($interested_student->student->getID(), $interested_student_copy->student->getID());
-        $this->assertEquals($interested_student->subject, $interested_student_copy->subject);
+        $this->assertEquals($interested_student->subject->getID(), $interested_student_copy->subject->getID());
     }
 
     public function testDelete(): void

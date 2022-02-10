@@ -43,7 +43,7 @@ final class QuizTest extends TestCase
         $this->assertEquals($quiz->getID(), $quiz_copy->getID());
         $this->assertEquals($quiz->name, $quiz_copy->name);
         $this->assertEquals($quiz->owner->getID(), $quiz_copy->owner->getID());
-        $this->assertEquals($quiz->subject, $quiz_copy->subject);
+        $this->assertEquals($quiz->subject->getID(), $quiz_copy->subject->getID());
     }
 
     public function testDelete(): void
