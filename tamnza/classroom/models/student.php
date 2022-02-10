@@ -2,6 +2,8 @@
 
 namespace Tamnza\App\Classroom\Model;
 
+require_once('user.php');
+
 class Student
 {
     private int $id = 0;

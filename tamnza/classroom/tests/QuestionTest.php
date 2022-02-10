@@ -6,15 +6,15 @@ namespace Tamnza\Test\Core;
 
 use PHPUnit\Framework\TestCase;
 
+require_once(dirname(__FILE__) . '/../../tamnza/database.php');
+require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
+require_once(dirname(__FILE__) . '/../models/question.php');
+require_once('QuizTest.php');
+
 final class QuestionTest extends TestCase
 {
     public function testCreate(): \Tamnza\App\Classroom\Model\Question
     {
-        require_once(dirname(__FILE__) . '/../../tamnza/database.php');
-        require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
-        require_once(dirname(__FILE__) . '/../models/question.php');
-        require_once('QuizTest.php');
-
         $quiz = (new QuizTest())->testCreate();
         $question = new \Tamnza\App\Classroom\Model\Question(text: sprintf('%s', rand()), quiz: $quiz);
 

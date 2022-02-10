@@ -6,14 +6,14 @@ namespace Tamnza\Test\Core;
 
 use PHPUnit\Framework\TestCase;
 
+require_once(dirname(__FILE__) . '/../../tamnza/database.php');
+require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
+require_once(dirname(__FILE__) . '/../models/user.php');
+
 final class UserTest extends TestCase
 {
     public function testCreate(): \Tamnza\App\Classroom\Model\User
     {
-        require_once(dirname(__FILE__) . '/../../tamnza/database.php');
-        require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
-        require_once(dirname(__FILE__) . '/../models/user.php');
-
         $user = new \Tamnza\App\Classroom\Model\User(username: sprintf('%s', rand()), first_name: sprintf('%s', rand()), last_name: sprintf('%s', rand()), email: sprintf(rand() . '@example.com'), password: sprintf('%s', rand()), is_student: false, is_teacher: true);
 
         $this->assertEquals($user->save(), true);

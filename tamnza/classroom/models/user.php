@@ -2,6 +2,8 @@
 
 namespace Tamnza\App\Classroom\Model;
 
+require_once('quiz.php');
+
 class User
 {
     public \Datetime $date_joined;

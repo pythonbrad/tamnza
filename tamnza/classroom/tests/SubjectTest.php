@@ -6,14 +6,14 @@ namespace Tamnza\Test\Core;
 
 use PHPUnit\Framework\TestCase;
 
+require_once(dirname(__FILE__) . '/../../tamnza/database.php');
+require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
+require_once(dirname(__FILE__) . '/../models/subject.php');
+
 final class SubjectTest extends TestCase
 {
     public function testCreate(): \Tamnza\App\Classroom\Model\Subject
     {
-        require_once(dirname(__FILE__) . '/../../tamnza/database.php');
-        require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
-        require_once(dirname(__FILE__) . '/../models/subject.php');
-
         $subject = new \Tamnza\App\Classroom\Model\Subject(name: sprintf('%s', rand()), color: 'red');
 
         $this->assertEquals($subject->save(), true);

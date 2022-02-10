@@ -6,16 +6,15 @@ namespace Tamnza\Test\Core;
 
 use PHPUnit\Framework\TestCase;
 
+require_once(dirname(__FILE__) . '/../../tamnza/database.php');
+require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
+require_once(dirname(__FILE__) . '/../models/student.php');
+require_once('UserTest.php');
+
 final class StudentTest extends TestCase
 {
     public function testCreate(): \Tamnza\App\Classroom\Model\Student
     {
-        require_once(dirname(__FILE__) . '/../../tamnza/database.php');
-        require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
-        require_once(dirname(__FILE__) . '/../models/user.php');
-        require_once(dirname(__FILE__) . '/../models/student.php');
-        require_once('UserTest.php');
-
         $user = (new UserTest())->testCreate();
         $student = new \Tamnza\App\Classroom\Model\Student(user: $user);
 

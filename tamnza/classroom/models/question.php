@@ -2,6 +2,8 @@
 
 namespace Tamnza\App\Classroom\Model;
 
+require_once('quiz.php');
+
 class Question
 {
     private int $id = 0;
