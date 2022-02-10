@@ -11,6 +11,3 @@ require_once("database.php");
 // ------- Vendor modules ------------
 
 // ------- Controller ------------
-
-// ------- Module ------------
-require_once(BASE_DIR . "classroom/models/user.php");
