@@ -33,4 +33,4 @@ define('DATABASES', array(
 define('STATIC_DIR', 'static/');
 
 # We load the error handler
-include(dirname(__FILE__) . '/' . 'error.php');
+require(dirname(__FILE__) . '/' . 'error.php');

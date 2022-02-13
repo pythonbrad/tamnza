@@ -4,9 +4,9 @@
     This function is responsible to load the scripts
 */
 
-require_once("settings.php");
-require_once(BASE_DIR . "core/router/conf.php");
-require_once("database.php");
+require("settings.php");
+require(BASE_DIR . "core/router/conf.php");
+require("database.php");
 
 // ------- Vendor modules ------------
 
