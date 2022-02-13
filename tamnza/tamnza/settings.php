@@ -19,7 +19,7 @@ define('DATABASES', array(
     'default' => array(
         'ENGINE' => 'mysql',
         'NAME' => 'tamnza',
-        'HOST' => 'localhost',
+        'HOST' => '127.0.0.1',
         'PORT' => '3306',
         'USERNAME' => '<username>',
         'PASSWORD' => '<user_password>',
