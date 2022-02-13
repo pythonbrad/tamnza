@@ -3,37 +3,48 @@
 	- [ ] Build the database
 		- [x] SQL code
 		- [x] Write a base DAO
+		- [ ] improvement
 	- [ ] Build the models
 		- [ ] User model
+			- [ ] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
 			- [x] quizzes attribute
 			- [x] student attribute
+			- [ ] take in account the date while the searching
 		- [ ] Subject model
+			- [ ] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
 			- [x] quizzes attribute
 			- [x] interested_students attribute
-		- [ ] Interested model
-			- 
+		- [ ] InterestedStudent model
+			- [ ] improvement
+		- [ ] TakenQuiz model
+			- [ ] take in account the date while the searching
+		- [ ] StudentAnswer model
+			- [ ] improvement 
 		- [ ] Student model
+			- [ ] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
-			- [ ] interests (subject) attribute
-			- [ ] quiz_answers attribute
-			- [ ] taken_quizzes attribute
+			- [x] interests (subject) attribute
+			- [x] quiz_answers attribute
+			- [x] taken_quizzes attribute
 			- [x] user attribute
 		- [ ] Quiz model
+			- [ ] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
 			- [x] owner (user) attribute
-			- [ ] questions attribute
+			- [x] questions attribute
 			- [x] subject attribute
-			- [ ] taken_quizzes (student) attribute
+			- [x] taken_quizzes (student) attribute
 		- [ ] Question model
+			- [ ] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD attribute
-			- [ ] answers attribute
+			- [x] answers attribute
 			- [x] quiz attribute
 		- [x] Answer model
 			- [x] unit test
@@ -45,5 +56,11 @@
 		- [ ] Improvement
 	- [ ] Core
 		- [ ] Write an error management using OOP
-	+ [ ] Build the controllers
-	+ [ ] Build the views
+	- [ ] Build the controllers
+		- [ ] Home
+		- [ ] Signup
+		- [ ] Login
+	- [ ] Build the views
+		- [ ] Home page
+		- [ ] Signup page
+		- [ ] Login page
