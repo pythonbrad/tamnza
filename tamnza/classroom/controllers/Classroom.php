@@ -44,4 +44,9 @@ class Classroom
 
         require(BASE_DIR . 'views/registration/login.php');
     }
+
+    public function signup()
+    {
+        require(BASE_DIR . 'views/registration/signup.php');
+    }
 }
