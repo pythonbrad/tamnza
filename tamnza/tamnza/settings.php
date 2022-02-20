@@ -7,7 +7,7 @@ define('BASE_DIR', dirname(__FILE__) . '/../');
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-define('DEBUG', true);
+define('DEBUG', false);
 
 
 # Database
