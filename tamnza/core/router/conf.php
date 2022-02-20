@@ -6,6 +6,8 @@ require_once('router.php');
 
 function includes(string $path, string $extension): array
 {
+    $path = rtrim($path, '/');
+
     require_once($extension);
 
     if (isset($routes)) {
