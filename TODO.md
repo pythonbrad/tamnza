@@ -5,31 +5,38 @@
 		- [x] Write a base DAO
 	- [ ] Build the models
 		- [ ] User model
+			- [ ] unit test
 			- [x] CRUD
 			- [ ] quizzes attribute
 			- [ ] student attribute
 		- [ ] Subject model
+			- [ ] unit test
 			- [x] CRUD
 			- [ ] quizzes attribute
 			- [ ] interested_students attribute
 		- [ ] Student model
+			- [ ] unit test
 			- [x] CRUD
 			- [ ] interests (subject) attribute
 			- [ ] quiz_answers attribute
 			- [ ] taken_quizzes attribute
+			- [x] user attribute
 		- [ ] Quiz model
+			- [ ] unit test
 			- [x] CRUD
-			- [ ] owner (user) attribute
+			- [x] owner (user) attribute
 			- [ ] questions attribute
-			- [ ] subject attribute
+			- [x] subject attribute
 			- [ ] taken_quizzes (student) attribute
 		- [ ] Question model
-			- [ ] CRUD attribute
+			- [ ] unit test
+			- [x] CRUD attribute
 			- [ ] answers attribute
-			- [ ] quiz attribute
+			- [x] quiz attribute
 		- [ ] Answer model
-			- [ ] CRUD attribute
-			- [ ] question attribute
+			- [ ] unit test
+			- [x] CRUD attribute
+			- [x] question attribute
 	- [ ] Build the routers
 		- [x] Base
 		- [ ] Improvement

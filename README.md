@@ -14,13 +14,6 @@ First, clone the repository to your local machine:
 git clone https://gitlab.com/resulam-dev/tamnza.git
 ```
 
-Install the requirements:
-
-```bash
-cd tamnza/tamnza/vendor
-git clone https://github.com/pythonbrad/lessql --single-branch
-```
-
 Create the database:
 
 ```bash
