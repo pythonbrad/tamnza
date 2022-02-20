@@ -58,9 +58,10 @@
 		- [ ] Write an error management using OOP
 	- [ ] Build the controllers
 		- [x] Home
-		- [ ] Signup
-		- [ ] Login
+		- [x] Signup
+		- [x] Login
+		- [ ] implement the csrftoken
 	- [ ] Build the views
 		- [x] Home page
 		- [ ] Signup page
-		- [ ] Login page
+		- [x] Login page
