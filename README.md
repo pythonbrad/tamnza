@@ -28,8 +28,8 @@ php -S 127.0.0.1:8000
 
 The project will be available at **127.0.0.1:8000**.
 
-# Use case diagram
-![Use Case diagram](https://github.com/pythonbrad/tamnza/blob/master/ucd.png)
+# Overview
+![Overview](https://github.com/pythonbrad/tamnza/blob/dev/overview.png)
 
 ## License
 
