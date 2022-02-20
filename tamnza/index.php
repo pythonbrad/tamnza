@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require('tamnza/autoloader.php');
 
 use Tamnza\Core\{Router, Route};

@@ -3,11 +3,14 @@
 use Tamnza\Core\{Route};
 
 require(dirname(__FILE__) . '/controllers/Classroom.php');
+require(dirname(__FILE__) . '/controllers/Student.php');
 
 $classroom = new \Tamnza\App\Classroom\Controller\Classroom();
+$student = new \Tamnza\App\Classroom\Controller\Student();
 
 $routes = array(
     new Route("$path", array($classroom, 'home'), name: 'home'),
     new Route("$path/login", array($classroom, 'login'), name: 'login'),
     new Route("$path/signup", array($classroom, 'signup'), name: 'signup'),
+    new Route("$path/student_signup", array($student, 'signup'), name: 'student_signup'),
 );
