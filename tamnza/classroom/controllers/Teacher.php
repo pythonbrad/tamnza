@@ -33,7 +33,8 @@ class Teacher
                 } else {
                     $user = new \Tamnza\App\Classroom\Model\User(
                         username: $_POST['username'],
-                        password: $_POST['password1']
+                        password: $_POST['password1'],
+                        is_teacher: true,
                     );
                     if ($user->save()) {
                         // We redirect to the home page
