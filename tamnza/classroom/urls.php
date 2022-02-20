@@ -2,8 +2,10 @@
 
 use Tamnza\Core\{Route};
 
+require(dirname(__FILE__) . '/controllers/Classroom.php');
+
+$classroom = new Tamnza\App\Classroom\Controller\Classroom();
+
 $routes = array(
-    new Route("$path/home", function () {
-        echo 'Welcome to Tamnza Classroom';
-    }),
+    new Route("$path", $classroom->home),
 );

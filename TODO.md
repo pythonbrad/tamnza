@@ -57,10 +57,10 @@
 	- [ ] Core
 		- [ ] Write an error management using OOP
 	- [ ] Build the controllers
-		- [ ] Home
+		- [x] Home
 		- [ ] Signup
 		- [ ] Login
 	- [ ] Build the views
-		- [ ] Home page
+		- [x] Home page
 		- [ ] Signup page
 		- [ ] Login page

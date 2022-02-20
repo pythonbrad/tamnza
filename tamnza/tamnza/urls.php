@@ -1,5 +1,5 @@
 <?php
 
 $routes = array(
-    \Tamnza\Core\includes("$path/home", 'classroom/urls.php'),
+    \Tamnza\Core\includes("$path", 'classroom/urls.php'),
 );
