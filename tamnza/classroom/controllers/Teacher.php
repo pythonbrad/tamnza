@@ -50,4 +50,25 @@ class Teacher
 
         require(BASE_DIR . 'views/registration/signup_form.php');
     }
+
+    public function quizChangeList()
+    {
+        $quizzes = array();
+        require(dirname(__FILE__) . '/../views/teacher/quiz_change_list.php');
+    }
+
+    public function quizAdd()
+    {
+        //
+    }
+
+    public function quizChange()
+    {
+        //
+    }
+
+    public function quizResults()
+    {
+        //
+    }
 }

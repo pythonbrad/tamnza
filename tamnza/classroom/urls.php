@@ -17,4 +17,8 @@ $routes = array(
     new Route("$path/logout", array($classroom, 'logout'), name: 'logout'),
     new Route("$path/student_signup", array($student, 'signup'), name: 'student_signup'),
     new Route("$path/teacher_signup", array($teacher, 'signup'), name: 'teacher_signup'),
+    new Route("$path/teacher", array($teacher, 'quizChangeList'), name: 'quiz_change_list'),
+    new Route("$path/teacher/quiz/add", array($teacher, 'quizAdd'), name: 'quiz_add'),
+    new Route("$path/teacher/quiz/<pk:int>/change", array($teacher, 'quizChange'), name: 'quiz_change'),
+    new Route("$path/teacher/quiz/<pk:int>/results", array($teacher, 'quizResults'), name: 'quiz_results'),
 );

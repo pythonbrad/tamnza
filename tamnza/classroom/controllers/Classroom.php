@@ -8,7 +8,15 @@ class Classroom
 {
     public function home()
     {
-        require(dirname(__FILE__) . '/../views/home.php');
+        if (isset($_SESSION['is_authenticated']) && $_SESSION['is_authenticated']) {
+            if ($_SESSION['is_teacher']) {
+                 header("Location: /?url=" . $GLOBALS['router']->url("quiz_change_list"), true, 301);
+            } else {
+                echo "todo";
+            }
+        } else {
+            require(dirname(__FILE__) . '/../views/home.php');
+        }
     }
 
     public function login()
