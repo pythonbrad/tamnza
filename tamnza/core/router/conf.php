@@ -4,6 +4,9 @@ namespace Tamnza\Core;
 
 require_once('router.php');
 
+/**
+ * This function permit to join another url file configuration
+ **/
 function includes(string $path, string $extension): array
 {
     $path = rtrim($path, '/');

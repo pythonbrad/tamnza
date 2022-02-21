@@ -19,6 +19,9 @@ class Router
         $this->url = $url;
     }
 
+    /**
+     * Permit to add an URL to the route table
+     **/
     public function add(string $path, callable $callable, string $name = null): Route
     {
         $route = new Route($path, $callable);
@@ -32,6 +35,9 @@ class Router
         return $route;
     }
 
+    /**
+     * Permit to extend the route table
+     **/
     public function extends(array $routes)
     {
         foreach ($routes as $route) {
@@ -44,6 +50,9 @@ class Router
         }
     }
 
+    /**
+     * Permit to get a route path by his name
+     **/
     public function url(string $name, array $params = []): string
     {
         if (!isset($this->namedRoutes[$name])) {
@@ -52,6 +61,9 @@ class Router
         return $this->namedRoutes[$name]->getUrl($params);
     }
 
+    /**
+     * Launch the router
+     **/
     public function run()
     {
         foreach ($this->routes as $route) {

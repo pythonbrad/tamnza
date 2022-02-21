@@ -47,6 +47,9 @@ class Route
         return true;
     }
 
+    /**
+     * Permit to build the URL with his parameters set
+     **/
     public function getUrl(array $params): string
     {
         $path = $this->path;
