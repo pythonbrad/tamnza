@@ -51,4 +51,15 @@ class Classroom
     {
         require(BASE_DIR . 'views/registration/signup.php');
     }
+
+    public function logout()
+    {
+        // We clean the session
+        $_SESSION = array();
+
+        $_SESSION['messages']['success'] = 'You have been logout with success.';
+
+        // We redirect to the home page
+        header("Location: /?url=" . $GLOBALS['router']->url("home"), true, 301);
+    }
 }
