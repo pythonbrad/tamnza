@@ -1,6 +1,6 @@
 # Tamnza
 
-![PHP Badge](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge)
+![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
 
 Tamnza is a quiz application in which, teachers can create quizzes and students can sign up and take quizzes related to their interests.
 
@@ -11,13 +11,13 @@ Inspired from [How to Implement Multiple User Types with Django](https://simplei
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://gitlab.com/resulam-dev/tamnza.git
+git clone https://github.com/pythonbrad/tamnza.git
 ```
 
 Create the database:
 
 ```bash
-
+mysql < tamnza/classroom/database.sql
 ```
 
 Finally, run the development server:
