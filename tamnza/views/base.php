@@ -22,7 +22,7 @@
           <div class="row">
             <div class="col-6">
               <h1 class="logo">
-                <a href="?url=/">
+                <a href="?url=<?= $GLOBALS['router']->url("home") ?>">
                   Tamnza
                 <?php if (isset($_SESSION['is_authenticated'])) { ?>
                     <?php if ($_SESSION['is_teacher']) { ?>
@@ -36,10 +36,10 @@
             </div>
             <div class="col-6 text-right">
             <?php if (isset($_SESSION['is_authenticated'])) { ?>
-                <p class="pt-3">Logged in as <strong><?= $_SESSION['username'] ?></strong>. <a href="?url=/logout">Log out</a>.</p>
+                <p class="pt-3">Logged in as <strong><?= $_SESSION['username'] ?></strong>. <a href="?url=<?= $GLOBALS['router']->url("logout") ?>">Log out</a>.</p>
             <?php } else { ?>
-                <a href="?url=/login" class="btn btn-light" role="button">Log in</a>
-                <a href="?url=/signup" class="btn btn-primary" role="button">Sign up</a>
+                <a href="?url=<?= $GLOBALS['router']->url("login") ?>" class="btn btn-light" role="button">Log in</a>
+                <a href="?url=<?= $GLOBALS['router']->url("signup") ?>" class="btn btn-primary" role="button">Sign up</a>
             <?php } ?>
             </div>
           </div>

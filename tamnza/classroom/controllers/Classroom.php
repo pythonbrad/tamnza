@@ -35,7 +35,9 @@ class Classroom
                     $_SESSION['is_teacher'] = $user[0]->is_teacher;
 
                     // We redirect to the home page
-                    header("Location: /", true, 301);
+                    header("Location: /?url=" . $GLOBALS['router']->url("home"), true, 301);
+
+                    return;
                 } else {
                     $errors['login'] = "Please enter a correct username and password. Note that both fields may be case-sensitive.";
                 }
