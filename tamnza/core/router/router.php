@@ -47,7 +47,7 @@ class Router
     public function url(string $name, array $params = []): string
     {
         if (!isset($this->namedRoutes[$name])) {
-            throw new Exception('No route matches this name');
+            throw new \Exception("No route matches this name '$name'");
         }
         return $this->namedRoutes[$name]->getUrl($params);
     }

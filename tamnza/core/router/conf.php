@@ -13,6 +13,6 @@ function includes(string $path, string $extension): array
     if (isset($routes)) {
         return $routes;
     } else {
-        throw new Exception("$extension don't contains the routes");
+        throw new \Exception("$extension don't contains the routes");
     }
 }
