@@ -53,7 +53,8 @@ class Teacher
 
     public function quizChangeList()
     {
-        $quizzes = array();
+        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $quizzes = $user->quizzes;
         require(dirname(__FILE__) . '/../views/teacher/quiz_change_list.php');
     }
 

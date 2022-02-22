@@ -40,6 +40,7 @@ class Classroom
                     // We save the auth
                     $_SESSION['is_authenticated'] = true;
                     $_SESSION['username'] = $user[0]->username;
+                    $_SESSION['user'] = $user[0]->getID();
                     $_SESSION['is_teacher'] = $user[0]->is_teacher;
 
                     // We redirect to the home page
