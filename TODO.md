@@ -61,6 +61,20 @@
 		- [x] Signup
 		- [x] Login
 		- [ ] implement the csrftoken
+		- [ ] teacher
+			- [x] quiz list
+			- [ ] add quiz
+			- [ ] change quiz
+			- [ ] delete quiz
+			- [ ] quiz results
+			- [ ] add question
+			- [ ] change question
+			- [ ] delete question
+		- [ ] student
+			- [ ] quiz list
+			- [ ] student interests
+			- [ ] taken quiz list
+			- [ ] take quiz
 	- [ ] Build the views
 		- [x] Home page
 		- [ ] Signup page
