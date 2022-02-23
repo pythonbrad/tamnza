@@ -63,7 +63,7 @@
 		- [ ] implement the csrftoken
 		- [ ] teacher
 			- [x] quiz list
-			- [ ] add quiz
+			- [x] add quiz
 			- [ ] change quiz
 			- [ ] delete quiz
 			- [ ] quiz results

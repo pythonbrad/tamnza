@@ -20,12 +20,12 @@
       <tbody>
         <?php foreach ($quizzes as $quiz) { ?>
           <tr>
-            <td class="align-middle"><a href="/?url=<?= $GLOBALS['router']->url("quiz_change", array('pk' => $quiz->getID())) ?>">{{ quiz.name }}</a></td>
+            <td class="align-middle"><a href="/?url=<?= $GLOBALS['router']->url("quiz_change", array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></td>
             <td class="align-middle"><?= $quiz->subject->getHtmlBadge() ?></td>
-            <td class="align-middle"><?= $quiz->questions_count ?></td>
-            <td class="align-middle"><?= $quiz->taken_count ?></td>
+            <td class="align-middle"><?= count($quiz->questions) ?></td>
+            <td class="align-middle"><?= count($quiz->taken_quizzes) ?></td>
             <td class="text-right">
-              <a href="/?url=<?= $GLOBALS['router']->url("quiz_results", $quiz->pk) ?>" class="btn btn-primary">View results</a>
+              <a href="/?url=<?= $GLOBALS['router']->url("quiz_results", array('pk' => $quiz->getID())) ?>" class="btn btn-primary">View results</a>
             </td>
           </tr>
         <?php } ?>

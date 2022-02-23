@@ -3,6 +3,8 @@
 namespace Tamnza\App\Classroom\Controller;
 
 require_once(dirname(__FILE__) . '/../models/User.php');
+require_once(dirname(__FILE__) . '/../models/Subject.php');
+require_once(dirname(__FILE__) . '/../models/Quiz.php');
 
 class Teacher
 {
@@ -60,10 +62,41 @@ class Teacher
 
     public function quizAdd()
     {
-        //
+        $errors = array();
+
+        if ($_POST) {
+            // We verify if the form is valid
+            if (!isset($_POST['name']) || strlen($_POST['name']) == 0) {
+                $errors['name'] = "This field is required.";
+            }
+            if (!isset($_POST['subject']) || strlen($_POST['subject']) == 0) {
+                $errors['subject'] = "This field is required.";
+            }
+
+            if (!$errors) {
+                $quiz = new \Tamnza\App\Classroom\Model\Quiz(
+                    name: $_POST['name'],
+                    owner: \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']),
+                    subject: \Tamnza\App\Classroom\Model\Subject::getByID($_POST['subject']),
+                );
+
+                if ($quiz->save()) {
+                    // We redirect to the home page
+                    $_SESSION['messages']['success'] = 'The quiz was created with success! Go ahead and add some questions now.';
+                    header("Location: /?url=" . $GLOBALS['router']->url(
+                        "quiz_change",
+                        array('pk' => $quiz->getID())
+                    ), true, 301);
+                    return;
+                }
+            }
+        }
+
+        $subjects = \Tamnza\App\Classroom\Model\Subject::search();
+        require(dirname(__FILE__) . '/../views/teacher/quiz_add_form.php');
     }
 
-    public function quizChange()
+    public function quizChange(int $id)
     {
         //
     }
