@@ -44,6 +44,14 @@ class Subject
         };
     }
 
+    public function getHtmlBadge()
+    {
+        $name = htmlentities($this->name);
+        $color = htmlentities($this->color);
+        $html = "<span class=\"badge badge-primary\" style=\"background-color: $color\">$name</span>";
+        return $html;
+    }
+
     public function save(): bool
     {
         $fields = array('name' => $this->name, 'color' => $this->color);
