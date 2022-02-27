@@ -2,20 +2,20 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="?url=<?php $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
+      <li class="breadcrumb-item"><a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
       <li class="breadcrumb-item active" aria-current="page"><?= $quiz->name ?></li>
     </ol>
   </nav>
   <h2 class="mb-3">
     <?= $quiz->name ?>
-    <a href="?url=<?php $GLOBALS['router']->url('quiz_results', array($quiz->getID())) ?>" class="btn btn-primary float-right">View results</a>
+    <a href="?url=<?= $GLOBALS['router']->url('quiz_results', array('pk' => $quiz->getID())) ?>" class="btn btn-primary float-right">View results</a>
   </h2>
   <div class="row mb-3">
     <div class="col-md-6 col-sm-8 col-12">
       <form method="post" novalidate>
         <button type="submit" class="btn btn-success">Save changes</button>
-        <a href="?url=<?php $GLOBALS['router']->url('quiz_change_list') ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
-        <a href="?url=<?php $GLOBALS['router']->url('quiz_delete', array($quiz->getID())) ?>" class="btn btn-danger float-right">Delete</a>
+        <a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
+        <a href="?url=<?= $GLOBALS['router']->url('quiz_delete', array('pk' => $quiz->getID())) ?>" class="btn btn-danger float-right">Delete</a>
       </form>
     </div>
   </div>
@@ -35,7 +35,7 @@
         <div class="list-group-item">
           <div class="row">
             <div class="col-10">
-              <a href="?url=<?php $GLOBALS['router']->url('quiz_change_list', array($quiz->getID()), $question->getID()) ?>"><?= $question->text ?></a>
+              <a href="?url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID()), $question->getID()) ?>"><?= $question->text ?></a>
             </div>
             <div class="col-2">
               <?= count($question->answers) ?>
@@ -45,12 +45,12 @@
       <?php } ?>
       <?php if (!$questions) { ?>
         <div class="list-group-item text-center">
-          <p class="text-muted font-italic mb-0">You haven't created any questions yet. Go ahead and <a href="?url=<?php $GLOBALS['router']->url('question_add', array($quiz->getID())) ?>">add the first question</a>.</p>
+          <p class="text-muted font-italic mb-0">You haven't created any questions yet. Go ahead and <a href="?url=<?= $GLOBALS['router']->url('question_add', array('quiz_pk' => $quiz->getID())) ?>">add the first question</a>.</p>
         </div>
       <?php } ?>
     </div>
     <div class="card-footer">
-      <a href="?url=<?php $GLOBALS['router']->url('question_add', array($quiz->getID())) ?>" class="btn btn-primary btn-sm">Add question</a>
+      <a href="?url=<?= $GLOBALS['router']->url('question_add', array('quiz_pk' => $quiz->getID())) ?>" class="btn btn-primary btn-sm">Add question</a>
     </div>
   </div>
 

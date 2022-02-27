@@ -2,7 +2,7 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="?url=<?php $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
+      <li class="breadcrumb-item"><a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
       <li class="breadcrumb-item active" aria-current="page">Add a new quiz</li>
     </ol>
   </nav>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <button type="submit" class="btn btn-success">Save</button>
-        <a href="?url=<?php $GLOBALS['router']->url('quiz_change_list') ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
+        <a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
       </form>
     </div>
   </div>
