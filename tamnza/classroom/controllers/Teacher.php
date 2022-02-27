@@ -98,10 +98,22 @@ class Teacher
 
     public function quizChange(int $id)
     {
-        //
+        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+        $questions = $quiz->questions;
+        require(dirname(__FILE__) . '/../views/teacher/quiz_change_form.php');
     }
 
     public function quizResults()
+    {
+        //
+    }
+
+    public function quizDelete(int $id)
+    {
+        //
+    }
+
+    public function questionAdd(int $quiz_id)
     {
         //
     }
