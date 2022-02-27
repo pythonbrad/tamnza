@@ -103,9 +103,16 @@ class Teacher
         require(dirname(__FILE__) . '/../views/teacher/quiz_change_form.php');
     }
 
-    public function quizResults()
+    public function quizResults(int $id)
     {
-        //
+        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+        $taken_quizzes = $quiz->taken_quizzes;
+        $total_score = 0.0;
+        foreach ($taken_quizzes as $taken_quiz) {
+            $total_score = $taken_quiz->score;
+        }
+        $average_score = $total_score ? ($total_score / count($taken_quizzes)) : $total_score;
+        require(dirname(__FILE__) . '/../views/teacher/quiz_results.php');
     }
 
     public function quizDelete(int $id)

@@ -48,6 +48,19 @@ class Quiz
         };
     }
 
+    // We will get the avg score
+    public function averageScore(): float
+    {
+        $total_score = 0.0;
+        $taken_quizzes = $this->taken_quizzes;
+
+        foreach ($taken_quizzes as $taken_quiz) {
+            $total_score = $taken_quiz->score;
+        }
+
+        return $total_score ? ($total_score / count($taken_quizzes)) : $total_score;
+    }
+
     public function save(): bool
     {
         $fields = array('name' => $this->name, 'owner_id' => $this->owner->getID(), 'subject_id' => $this->subject->getID());

@@ -66,4 +66,11 @@ final class QuizTest extends TestCase
 
         $this->assertIsArray($quiz->taken_quizzes);
     }
+
+    public function testAverageScore(): void
+    {
+        $quiz = $this->testCreate();
+
+        $this->assertEquals($quiz->averageScore(), 0.0);
+    }
 }
