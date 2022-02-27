@@ -79,3 +79,4 @@
 		- [x] Home page
 		- [ ] Signup page
 		- [x] Login page
+		- [ ] escape the data of the view
