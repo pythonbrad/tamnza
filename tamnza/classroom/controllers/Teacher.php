@@ -117,7 +117,19 @@ class Teacher
 
     public function quizDelete(int $id)
     {
-        //
+        $errors = array();
+
+        if ($_POST) {
+            // to secure
+            $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+            $_SESSION['messages']['success'] = 'The quiz ' . $quiz->name . ' was deleted with success!';
+            $quiz->delete();
+            header("Location: /?url=" . $GLOBALS['router']->url("quiz_change_list"), true, 301);
+            return;
+        }
+
+        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+        require(dirname(__FILE__) . '/../views/teacher/quiz_delete_confirm.php');
     }
 
     public function questionAdd(int $quiz_id)
