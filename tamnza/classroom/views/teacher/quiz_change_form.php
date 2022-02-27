@@ -35,7 +35,7 @@
         <div class="list-group-item">
           <div class="row">
             <div class="col-10">
-              <a href="?url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID()), $question->getID()) ?>"><?= $question->text ?></a>
+              <a href="?url=<?= $GLOBALS['router']->url('question_change', array('quiz_pk' => $quiz->getID(), 'question_pk' => $question->getID())) ?>"><?= $question->text ?></a>
             </div>
             <div class="col-2">
               <?= count($question->answers) ?>

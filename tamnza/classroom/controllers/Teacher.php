@@ -5,6 +5,7 @@ namespace Tamnza\App\Classroom\Controller;
 require_once(dirname(__FILE__) . '/../models/User.php');
 require_once(dirname(__FILE__) . '/../models/Subject.php');
 require_once(dirname(__FILE__) . '/../models/Quiz.php');
+require_once(dirname(__FILE__) . '/../models/Question.php');
 
 class Teacher
 {
@@ -133,6 +134,30 @@ class Teacher
     }
 
     public function questionAdd(int $quiz_id)
+    {
+        $errors = array();
+        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($quiz_id);
+
+        if ($_POST) {
+            if (!isset($_POST['text']) || strlen($_POST['text']) == 0) {
+                $errors['text'] = "This field is required.";
+            }
+
+            if (!$errors) {
+                // to secure
+                $question = new \Tamnza\App\Classroom\Model\Question(text: $_POST['text'], quiz: $quiz);
+                if ($question->save()) {
+                    $_SESSION['messages']['success'] = 'You may now add answers/options to the question.';
+                    header("Location: /?url=" . $GLOBALS['router']->url("question_change", array('quiz_pk' => $quiz_id, 'question_pk' => $question->getID())), true, 301);
+                    return;
+                }
+            }
+        }
+
+        require(dirname(__FILE__) . '/../views/teacher/question_add_form.php');
+    }
+
+    public function questionChange(int $quiz_id, int $question_id)
     {
         //
     }
