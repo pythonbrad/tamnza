@@ -42,8 +42,7 @@ class Teacher
                     if ($user->save()) {
                         // We redirect to the home page
                         $_SESSION['messages']['success'] = 'Your account has been created with success. You can login now';
-                        header("Location: /?url=" . $GLOBALS['router']->url("home"), true, 301);
-                        return;
+                        return header("Location: /?url=" . $GLOBALS['router']->url("home"), true, 301);
                     }
                 }
             }
@@ -84,11 +83,10 @@ class Teacher
                 if ($quiz->save()) {
                     // We redirect to the home page
                     $_SESSION['messages']['success'] = 'The quiz was created with success! Go ahead and add some questions now.';
-                    header("Location: /?url=" . $GLOBALS['router']->url(
+                    return header("Location: /?url=" . $GLOBALS['router']->url(
                         "quiz_change",
                         array('pk' => $quiz->getID())
                     ), true, 301);
-                    return;
                 }
             }
         }
@@ -119,17 +117,16 @@ class Teacher
     public function quizDelete(int $id)
     {
         $errors = array();
+        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
 
         if ($_POST) {
             // to secure
-            $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
             $_SESSION['messages']['success'] = 'The quiz ' . $quiz->name . ' was deleted with success!';
-            $quiz->delete();
-            header("Location: /?url=" . $GLOBALS['router']->url("quiz_change_list"), true, 301);
-            return;
+            if ($quiz->delete()) {
+                return header("Location: /?url=" . $GLOBALS['router']->url("quiz_change_list"), true, 301);
+            }
         }
 
-        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
         require(dirname(__FILE__) . '/../views/teacher/quiz_delete_confirm.php');
     }
 
@@ -148,8 +145,7 @@ class Teacher
                 $question = new \Tamnza\App\Classroom\Model\Question(text: $_POST['text'], quiz: $quiz);
                 if ($question->save()) {
                     $_SESSION['messages']['success'] = 'You may now add answers/options to the question.';
-                    header("Location: /?url=" . $GLOBALS['router']->url("question_change", array('quiz_pk' => $quiz_id, 'question_pk' => $question->getID())), true, 301);
-                    return;
+                    return header("Location: /?url=" . $GLOBALS['router']->url("question_change", array('quiz_pk' => $quiz_id, 'question_pk' => $question->getID())), true, 301);
                 }
             }
         }
