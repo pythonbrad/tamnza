@@ -64,9 +64,9 @@
 		- [ ] teacher
 			- [x] quiz list
 			- [x] add quiz
-			- [ ] change quiz
-			- [ ] delete quiz
-			- [ ] quiz results
+			- [x] change quiz
+			- [x] delete quiz
+			- [x] quiz results
 			- [ ] add question
 			- [ ] change question
 			- [ ] delete question
@@ -77,6 +77,6 @@
 			- [ ] take quiz
 	- [ ] Build the views
 		- [x] Home page
-		- [ ] Signup page
+		- [x] Signup page
 		- [x] Login page
-		- [ ] escape the data of the view
+		- [ ] escape the data for the view
