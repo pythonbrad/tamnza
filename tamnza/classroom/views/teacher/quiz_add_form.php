@@ -15,7 +15,10 @@
             Name<span class="asteriskField">*</span>
           </label>
           <div class="">
-            <input type="text" name="name" maxlength="255" class="textinput textInput form-control" required="" id="id_name">
+            <input name="name" autofocus="" autocapitalize="none" autocomplete="name" class="textinput textInput form-control <?= (isset($errors["name"])) ? "is-invalid" : "" ?>" required="" id="id_name" type="text">
+            <?php if (isset($errors["name"])) { ?>
+                <p id="error_id_name" class="invalid-feedback"><strong><?= $errors["name"] ?></strong></p>
+            <?php } ?>
           </div>
         </div>
         <div id="div_id_subject" class="form-group">
@@ -29,6 +32,9 @@
                 <option value="<?= $subject->getID() ?>"><?= $subject->name ?></option>
               <?php } ?>
             </select>
+            <?php if (isset($errors["subject"])) { ?>
+                <p class="text text-danger"><strong><?= $errors["subject"] ?></strong></p>
+            <?php } ?>
           </div>
         </div>
         <button type="submit" class="btn btn-success">Save</button>
