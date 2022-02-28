@@ -13,8 +13,7 @@
   <div class="row mb-3">
     <div class="col-md-6 col-sm-8 col-12">
       <form method="post" novalidate>
-        <button type="submit" class="btn btn-success">Save changes</button>
-        <a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
+        <?php require('quiz_form.php') ?>
         <a href="?url=<?= $GLOBALS['router']->url('quiz_delete', array('pk' => $quiz->getID())) ?>" class="btn btn-danger float-right">Delete</a>
       </form>
     </div>

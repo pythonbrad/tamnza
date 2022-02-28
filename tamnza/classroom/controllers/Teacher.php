@@ -97,8 +97,36 @@ class Teacher
 
     public function quizChange(int $id)
     {
+        $errors = array();
         $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+
+        if ($_POST) {
+            // We verify if the form is valid
+            if (!isset($_POST['name']) || strlen($_POST['name']) == 0) {
+                $errors['name'] = "This field is required.";
+            }
+            if (!isset($_POST['subject']) || strlen($_POST['subject']) == 0) {
+                $errors['subject'] = "This field is required.";
+            }
+
+            if (!$errors) {
+                $quiz->name = $_POST['name'];
+                $quiz->subject = \Tamnza\App\Classroom\Model\Subject::getByID($_POST['subject']);
+
+                if ($quiz->save()) {
+                    // We redirect to the home page
+                    $_SESSION['messages']['success'] = 'The quiz was updated with success!';
+                    return header("Location: /?url=" . $GLOBALS['router']->url(
+                        "quiz_change",
+                        array('pk' => $quiz->getID())
+                    ), true, 301);
+                }
+            }
+        }
+
         $questions = $quiz->questions;
+        $subjects = \Tamnza\App\Classroom\Model\Subject::search();
+
         require(dirname(__FILE__) . '/../views/teacher/quiz_change_form.php');
     }
 
