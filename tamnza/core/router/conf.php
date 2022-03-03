@@ -2,7 +2,7 @@
 
 namespace Tamnza\Core;
 
-require_once('router.php');
+require('router.php');
 
 /**
  * This function permit to join another url file configuration
@@ -11,7 +11,7 @@ function includes(string $path, string $extension): array
 {
     $path = rtrim($path, '/');
 
-    require_once($extension);
+    require($extension);
 
     if (isset($routes)) {
         return $routes;

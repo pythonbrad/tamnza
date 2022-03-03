@@ -2,7 +2,7 @@
 
 namespace Tamnza\Core;
 
-require_once('route.php');
+require('route.php');
 
 // Inspired from https://grafikart.fr/tutoriels/router-628
 

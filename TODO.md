@@ -81,3 +81,5 @@
 		- [x] Signup page
 		- [x] Login page
 		- [ ] escape the data for the view
+	- [ ] refactor the code
+		- [x] properly use of require, require_once and include

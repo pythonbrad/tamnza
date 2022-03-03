@@ -10,7 +10,7 @@ final class IncludesTest extends TestCase
 {
     public function test(): void
     {
-        require_once(dirname(__FILE__) . '/../../router/conf.php');
+        require(dirname(__FILE__) . '/../../router/conf.php');
 
         $result = \Tamnza\Core\includes('a', dirname(__FILE__) . '/urls1.php');
 
