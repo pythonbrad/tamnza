@@ -266,8 +266,20 @@ class Teacher
         require(dirname(__FILE__) . '/../views/teacher/question_change_form.php');
     }
 
-    public function questionDelete()
+    public function questionDelete(int $quiz_id, int $question_id)
     {
-        echo 1;
+        $errors = array();
+        $question = \Tamnza\App\Classroom\Model\Question::getByID($question_id);
+        $quiz = $question->quiz;
+
+        if ($_POST) {
+            // to secure
+            $_SESSION['messages']['success'] = 'The question ' . $question->text . ' was deleted with success!';
+            if ($question->delete()) {
+                return header("Location: " . $GLOBALS['router']->url("quiz_change", array('pk' => $quiz_id)), true, 301);
+            }
+        }
+
+        require(dirname(__FILE__) . '/../views/teacher/question_delete_confirm.php');
     }
 }
