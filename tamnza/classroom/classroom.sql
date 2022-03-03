@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS classroom_subject (
 CREATE TABLE IF NOT EXISTS classroom_student (
 	user_id INTEGER NOT NULL,
 	PRIMARY KEY (user_id),
-	FOREIGN KEY (user_id) REFERENCES classroom_user (id)
+	FOREIGN KEY (user_id) REFERENCES classroom_user (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS classroom_student_interests (
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS classroom_student_interests (
 	student_id INTEGER NOT NULL,
 	subject_id INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (student_id) REFERENCES classroom_student (user_id),
-	FOREIGN KEY (subject_id) REFERENCES classroom_subject (id)
+	FOREIGN KEY (student_id) REFERENCES classroom_student (user_id) ON DELETE CASCADE,
+	FOREIGN KEY (subject_id) REFERENCES classroom_subject (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS classroom_quiz (
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS classroom_quiz (
 	owner_id INTEGER NOT NULL,
 	subject_id INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (owner_id) REFERENCES classroom_user (id),
-	FOREIGN KEY (subject_id) REFERENCES classroom_subject (id)
+	FOREIGN KEY (owner_id) REFERENCES classroom_user (id) ON DELETE CASCADE,
+	FOREIGN KEY (subject_id) REFERENCES classroom_subject (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS classroom_question (
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS classroom_question (
 	text VARCHAR(255) NOT NULL,
 	quiz_id INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (quiz_id) REFERENCES classroom_quiz (id)
+	FOREIGN KEY (quiz_id) REFERENCES classroom_quiz (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS classroom_answer (
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS classroom_answer (
 	is_correct BOOL NOT NULL,
 	question_id INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (question_id) REFERENCES classroom_question (id)
+	FOREIGN KEY (question_id) REFERENCES classroom_question (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS classroom_takenquiz (
@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS classroom_takenquiz (
 	quiz_id INTEGER NOT NULL,
 	student_id INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (quiz_id) REFERENCES classroom_quiz (id),
-	FOREIGN KEY (student_id) REFERENCES classroom_student (user_id)
+	FOREIGN KEY (quiz_id) REFERENCES classroom_quiz (id) ON DELETE CASCADE,
+	FOREIGN KEY (student_id) REFERENCES classroom_student (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS classroom_studentanswer (
@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS classroom_studentanswer (
 	answer_id INTEGER NOT NULL,
 	student_id INTEGER NOT NULL,
 	PRIMARY KEY (id),
-	FOREIGN KEY (answer_id) REFERENCES classroom_answer (id),
-	FOREIGN KEY (student_id) REFERENCES classroom_student (user_id)
+	FOREIGN KEY (answer_id) REFERENCES classroom_answer (id) ON DELETE CASCADE,
+	FOREIGN KEY (student_id) REFERENCES classroom_student (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS classroom_php_session (
