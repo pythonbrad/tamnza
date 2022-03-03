@@ -2,8 +2,8 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
-      <li class="breadcrumb-item"><a href="?url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></li>
+      <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
+      <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></li>
       <li class="breadcrumb-item active" aria-current="page"><?= $question->text ?></li>
     </ol>
   </nav>
@@ -65,8 +65,8 @@
       <small class="form-text text-muted">Your question may have at least <strong>2</strong> answers and maximum <strong>10</strong> answers. Select at least one correct answer.</small>
     </p>
     <button type="submit" class="btn btn-success">Save changes</button>
-    <a href="?url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
-    <a href="?url=<?= $GLOBALS['router']->url('question_delete', array('quiz_pk' => $quiz->getID(), 'question_pk' => $question->getID())) ?>" class="btn btn-danger float-right">Delete</a>
+    <a href="<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
+    <a href="<?= $GLOBALS['router']->url('question_delete', array('quiz_pk' => $quiz->getID(), 'question_pk' => $question->getID())) ?>" class="btn btn-danger float-right">Delete</a>
   </form>
 
 <?php

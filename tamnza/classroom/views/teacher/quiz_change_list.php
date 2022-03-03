@@ -5,7 +5,7 @@
     </ol>
   </nav>
   <h2 class="mb-3">My Quizzes</h2>
-  <a href="?url=<?= $GLOBALS['router']->url("quiz_add") ?>" class="btn btn-primary mb-3" role="button">Add quiz</a>
+  <a href="<?= $GLOBALS['router']->url("quiz_add") ?>" class="btn btn-primary mb-3" role="button">Add quiz</a>
   <div class="card">
     <table class="table mb-0">
       <thead>
@@ -20,12 +20,12 @@
       <tbody>
         <?php foreach ($quizzes as $quiz) { ?>
           <tr>
-            <td class="align-middle"><a href="?url=<?= $GLOBALS['router']->url("quiz_change", array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></td>
+            <td class="align-middle"><a href="<?= $GLOBALS['router']->url("quiz_change", array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></td>
             <td class="align-middle"><?= $quiz->subject->getHtmlBadge() ?></td>
             <td class="align-middle"><?= count($quiz->questions) ?></td>
             <td class="align-middle"><?= count($quiz->taken_quizzes) ?></td>
             <td class="text-right">
-              <a href="?url=<?= $GLOBALS['router']->url("quiz_results", array('pk' => $quiz->getID())) ?>" class="btn btn-primary">View results</a>
+              <a href="<?= $GLOBALS['router']->url("quiz_results", array('pk' => $quiz->getID())) ?>" class="btn btn-primary">View results</a>
             </td>
           </tr>
         <?php } ?>

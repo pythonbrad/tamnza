@@ -26,4 +26,4 @@
           </div>
         </div>
         <button type="submit" class="btn btn-success">Save</button>
-        <a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
+        <a href="<?= $GLOBALS['router']->url('quiz_change_list') ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>

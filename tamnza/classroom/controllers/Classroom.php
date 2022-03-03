@@ -10,7 +10,7 @@ class Classroom
     {
         if (isset($_SESSION['is_authenticated']) && $_SESSION['is_authenticated']) {
             if ($_SESSION['is_teacher']) {
-                 return header("Location: /?url=" . $GLOBALS['router']->url("quiz_change_list"), true, 301);
+                 return header("Location: " . $GLOBALS['router']->url("quiz_change_list"), true, 301);
             } else {
                 echo "todo";
             }
@@ -44,7 +44,7 @@ class Classroom
                     $_SESSION['is_teacher'] = $user[0]->is_teacher;
 
                     // We redirect to the home page
-                    return header("Location: /?url=" . $GLOBALS['router']->url("home"), true, 301);
+                    return header("Location: " . $GLOBALS['router']->url("home"), true, 301);
                 } else {
                     $errors['login'] = "Please enter a correct username and password. Note that both fields may be case-sensitive.";
                 }
@@ -67,6 +67,6 @@ class Classroom
         $_SESSION['messages']['success'] = 'You have been logout with success.';
 
         // We redirect to the home page
-        return header("Location: /?url=" . $GLOBALS['router']->url("home"), true, 301);
+        return header("Location: " . $GLOBALS['router']->url("home"), true, 301);
     }
 }

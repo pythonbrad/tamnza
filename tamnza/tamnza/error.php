@@ -25,7 +25,7 @@ function log_exception(object $e)
     } else {
         $message = date("[d/m/Y H:i:s]") . " " . "Type: " . get_class($e) . "; Message: {$e->getMessage()}; File: {$e->getFile()}; Line: {$e->getLine()};";
         file_put_contents(BASE_DIR . "exceptions.log", $message . PHP_EOL, FILE_APPEND);
-        header("Location: /?url=" . $GLOBALS['router']->url("error"), true, 301);
+        header("Location: " . $GLOBALS['router']->url("error"), true, 301);
     }
     exit();
 }

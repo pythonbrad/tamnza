@@ -56,7 +56,7 @@ class Student
 
                         // We redirect to the home page
                         $_SESSION['messages']['success'] = 'Your account has been created with success. You can login now';
-                        return header("Location: /?url=" . $GLOBALS['router']->url("home"), true, 301);
+                        return header("Location: " . $GLOBALS['router']->url("home"), true, 301);
                     }
                 }
             }
