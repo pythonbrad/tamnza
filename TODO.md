@@ -4,6 +4,7 @@
 		- [x] SQL code
 		- [x] Write a base DAO
 		- [ ] improvement
+		- [x] limit the number of connection with the database
 	- [ ] Build the models
 		- [ ] User model
 			- [ ] for the delete, the children should be affect
