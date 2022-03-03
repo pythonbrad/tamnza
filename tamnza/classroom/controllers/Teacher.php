@@ -6,6 +6,7 @@ require_once(dirname(__FILE__) . '/../models/User.php');
 require_once(dirname(__FILE__) . '/../models/Subject.php');
 require_once(dirname(__FILE__) . '/../models/Quiz.php');
 require_once(dirname(__FILE__) . '/../models/Question.php');
+require_once(dirname(__FILE__) . '/../models/Answer.php');
 
 class Teacher
 {
@@ -183,6 +184,90 @@ class Teacher
 
     public function questionChange(int $quiz_id, int $question_id)
     {
-        //
+        $errors = array();
+        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($quiz_id);
+        $question = \Tamnza\App\Classroom\Model\Question::getByID($question_id);
+        $answers = array();
+        $to_ignore = array();
+
+        foreach ($question->answers as $answer) {
+            if (($_POST['answer-' . $answer->getID() . '-to-delete'] ?? '') == 'on') {
+                $answer->delete();
+                $to_ignore[] = $answer->getID();
+            } else {
+                $answers[] = $answer;
+            }
+        }
+
+        $length = count($answers);
+
+        for ($i = 0; $i < 3 && ($length + $i) < 10; $i++) {
+            $answer_id = -($i + 1);
+            $answer = new \Tamnza\App\Classroom\Model\Answer();
+            $answer->setID($answer_id);
+            $answer->text = $_POST['answer-' . $answer_id . '-text'] ?? '';
+            $answer->is_correct = ($_POST['answer-' . $answer_id . '-is_correct'] ?? '') == 'on';
+            $answers[] = $answer;
+        }
+
+        if ($_POST) {
+            if (!isset($_POST['text']) || strlen($_POST['text']) == 0) {
+                $errors['text'] = "This field is required.";
+            }
+            // We should verify that we have at least 2 answers and 1 correct
+            if (isset($_POST['answer-ids'])) {
+                $correct_answers_num = 0;
+                $answers_num = 0;
+                foreach ($_POST['answer-ids'] as $answer_id) {
+                    if (($_POST['answer-' . $answer_id . '-is_correct'] ?? '') == 'on' && !in_array($answer_id, $to_ignore)) {
+                        $correct_answers_num++;
+                        if (($_POST['answer-' . $answer_id . '-text'] ?? '') == '') {
+                            $errors['answer-' . $answer_id . '-text'] = "This field is required.";
+                        } else {
+                            $answers_num++;
+                        }
+                    } else if (($_POST['answer-' . $answer_id . '-text'] ?? '') != '') {
+                        $answers_num++;
+                    }
+                }
+                if ($correct_answers_num < 1) {
+                    $errors['answers'] = "Mark at least one answer as correct.";
+                } else if ($answers_num < 2) {
+                    $errors['answers'] = "Please submit at least 2 forms.";
+                }
+            } else {
+                $errors['answers'] = "Please submit at least 2 forms.";
+            }
+
+            if (!$errors) {
+                // to secure
+                $question->text = $_POST['text'];
+                if ($question->save()) {
+                    foreach ($_POST['answer-ids'] as $answer_id) {
+                        if ($_POST['answer-' . $answer_id . '-text']) {
+                            $answer = new \Tamnza\App\Classroom\Model\Answer();
+                            $answer->text = $_POST['answer-' . $answer_id . '-text'];
+                            $answer->is_correct = ($_POST['answer-' . $answer_id . '-is_correct'] ?? null) == 'on';
+                            $answer->question = $question;
+                            // negative, to create
+                            // positive, to update if not delete else delete
+                            if ($answer_id > 0) {
+                                $answer->setID($answer_id);
+                            }
+                            $answer->save();
+                        }
+                    }
+                    $_SESSION['messages']['success'] = 'Question and answers saved with success!';
+                    return header("Location: /?url=" . $GLOBALS['router']->url("quiz_change", array('pk' => $quiz_id)), true, 301);
+                }
+            }
+        }
+
+        require(dirname(__FILE__) . '/../views/teacher/question_change_form.php');
+    }
+
+    public function questionDelete()
+    {
+        echo 1;
     }
 }

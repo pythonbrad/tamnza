@@ -24,4 +24,5 @@ $routes = array(
     new Route("$path/teacher/quiz/<pk:int>/delete", array($teacher, 'quizDelete'), name: 'quiz_delete'),
     new Route("$path/teacher/quiz/<quiz_pk:int>/question/add", array($teacher, 'questionAdd'), name: 'question_add'),
     new Route("$path/teacher/quiz/<quiz_pk:int>/question/<question_pk:int>", array($teacher, 'questionChange'), name: 'question_change'),
+    new Route("$path/teacher/quiz/<quiz_pk:int>/question/<question_pk:int>/delete", array($teacher, 'questionDelete'), name: 'question_delete'),
 );
