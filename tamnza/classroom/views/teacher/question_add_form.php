@@ -2,8 +2,8 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="url=<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
-      <li class="breadcrumb-item"><a href="url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></li>
+      <li class="breadcrumb-item"><a href="?url=<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
+      <li class="breadcrumb-item"><a href="?url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Add a new question</li>
     </ol>
   </nav>
@@ -12,7 +12,7 @@
   <form method="post" novalidate>
     <?php require('question_form.php') ?>
     <button type="submit" class="btn btn-success">Save</button>
-    <a href="url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
+    <a href="?url=<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>" class="btn btn-outline-secondary" role="button">Nevermind</a>
   </form>
 
 <?php
