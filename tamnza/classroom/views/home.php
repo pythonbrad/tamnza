@@ -2,7 +2,7 @@
 
   <h2>Welcome to the Tamnza! <span class="icon-emo-happy"></span></h2>
   <p class="lead">
-    If you already have an account, go ahead and <a href="/login">log in</a>. If you are new to Tamnza, get started
+    If you already have an account, go ahead and <a href="<?= $GLOBALS['router']->url("login") ?>">log in</a>. If you are new to Tamnza, get started
     by creating a <a href="<?= $GLOBALS['router']->url("student_signup") ?>">student account</a> or a <a href="<?= $GLOBALS['router']->url("teacher_signup") ?>">teacher account</a>.
   </p>
   <hr>

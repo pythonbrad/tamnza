@@ -17,7 +17,7 @@
       </div>
     </div>
     <button type="submit" class="btn btn-success">Save changes</button>
-    <a href="<?php $GLOBALS['router']->url('quiz_list') ?>" class="btn btn-outline-secondary">Nevermind</a>
+    <a href="<?= $GLOBALS['router']->url('quiz_list') ?>" class="btn btn-outline-secondary">Nevermind</a>
   </form>
 
 <?php
