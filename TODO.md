@@ -7,14 +7,14 @@
 		- [x] limit the number of connection with the database
 	- [ ] Build the models
 		- [ ] User model
-			- [ ] for the delete, the children should be affect
+			- [x] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
 			- [x] quizzes attribute
 			- [x] student attribute
 			- [ ] take in account the date while the searching
 		- [ ] Subject model
-			- [ ] for the delete, the children should be affect
+			- [x] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
 			- [x] quizzes attribute
@@ -26,7 +26,7 @@
 		- [ ] StudentAnswer model
 			- [ ] improvement 
 		- [ ] Student model
-			- [ ] for the delete, the children should be affect
+			- [x] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
 			- [x] interests (subject) attribute
@@ -34,7 +34,7 @@
 			- [x] taken_quizzes attribute
 			- [x] user attribute
 		- [ ] Quiz model
-			- [ ] for the delete, the children should be affect
+			- [x] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD
 			- [x] owner (user) attribute
@@ -42,7 +42,7 @@
 			- [x] subject attribute
 			- [x] taken_quizzes (student) attribute
 		- [ ] Question model
-			- [ ] for the delete, the children should be affect
+			- [x] for the delete, the children should be affect
 			- [x] unit test
 			- [x] CRUD attribute
 			- [x] answers attribute
@@ -68,11 +68,11 @@
 			- [x] change quiz
 			- [x] delete quiz
 			- [x] quiz results
-			- [ ] add question
-			- [ ] change question
-			- [ ] delete question
+			- [x] add question
+			- [x] change question
+			- [x] delete question
 		- [ ] student
-			- [ ] quiz list
+			- [x] quiz list
 			- [ ] student interests
 			- [ ] taken quiz list
 			- [ ] take quiz
