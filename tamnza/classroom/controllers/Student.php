@@ -130,7 +130,10 @@ class Student
 
     public function takenQuizList()
     {
-        //
+        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $taken_quizzes = $user->student->taken_quizzes;
+
+        require(dirname(__FILE__) . '/../views/students/taken_quiz_list.php');
     }
 
     public function takeQuiz()

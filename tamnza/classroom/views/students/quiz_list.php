@@ -25,7 +25,7 @@ require('_header.php')
             <td class="align-middle"><?= $quiz->subject->getHtmlBadge() ?></td>
             <td class="align-middle"><?= count($quiz->questions) ?> questions</td>
             <td class="text-right">
-              <a href="<?php $GLOBALS['router']->url('taken_quiz', array('pk' => $quiz->getID())) ?>" class="btn btn-primary">Start quiz</a>
+              <a href="<?php $GLOBALS['router']->url('take_quiz', array('pk' => $quiz->getID())) ?>" class="btn btn-primary">Start quiz</a>
             </td>
           </tr>
         <?php } ?>

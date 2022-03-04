@@ -37,5 +37,5 @@ $routes = array(
     new Route("$path/student", array($student, 'quizList'), name: 'quiz_list'),
     new Route("$path/student/interests", array($student, 'studentInterests'), name: 'student_interests'),
     new Route("$path/student/taken", array($student, 'takenQuizList'), name: 'taken_quiz_list'),
-    new Route("$path/student/quiz/<pk:int>", array($student, 'takeQuiz'), name: 'taken_quiz'),
+    new Route("$path/student/quiz/<pk:int>", array($student, 'takeQuiz'), name: 'take_quiz'),
 );
