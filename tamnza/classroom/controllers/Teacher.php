@@ -58,7 +58,7 @@ class Teacher
     {
         $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
         $quizzes = $user->quizzes;
-        require(dirname(__FILE__) . '/../views/teacher/quiz_change_list.php');
+        require(dirname(__FILE__) . '/../views/teachers/quiz_change_list.php');
     }
 
     public function quizAdd()
@@ -93,7 +93,7 @@ class Teacher
         }
 
         $subjects = \Tamnza\App\Classroom\Model\Subject::search();
-        require(dirname(__FILE__) . '/../views/teacher/quiz_add_form.php');
+        require(dirname(__FILE__) . '/../views/teachers/quiz_add_form.php');
     }
 
     public function quizChange(int $id)
@@ -128,7 +128,7 @@ class Teacher
         $questions = $quiz->questions;
         $subjects = \Tamnza\App\Classroom\Model\Subject::search();
 
-        require(dirname(__FILE__) . '/../views/teacher/quiz_change_form.php');
+        require(dirname(__FILE__) . '/../views/teachers/quiz_change_form.php');
     }
 
     public function quizResults(int $id)
@@ -140,7 +140,7 @@ class Teacher
             $total_score = $taken_quiz->score;
         }
         $average_score = $total_score ? ($total_score / count($taken_quizzes)) : $total_score;
-        require(dirname(__FILE__) . '/../views/teacher/quiz_results.php');
+        require(dirname(__FILE__) . '/../views/teachers/quiz_results.php');
     }
 
     public function quizDelete(int $id)
@@ -156,7 +156,7 @@ class Teacher
             }
         }
 
-        require(dirname(__FILE__) . '/../views/teacher/quiz_delete_confirm.php');
+        require(dirname(__FILE__) . '/../views/teachers/quiz_delete_confirm.php');
     }
 
     public function questionAdd(int $quiz_id)
@@ -179,7 +179,7 @@ class Teacher
             }
         }
 
-        require(dirname(__FILE__) . '/../views/teacher/question_add_form.php');
+        require(dirname(__FILE__) . '/../views/teachers/question_add_form.php');
     }
 
     public function questionChange(int $quiz_id, int $question_id)
@@ -263,7 +263,7 @@ class Teacher
             }
         }
 
-        require(dirname(__FILE__) . '/../views/teacher/question_change_form.php');
+        require(dirname(__FILE__) . '/../views/teachers/question_change_form.php');
     }
 
     public function questionDelete(int $quiz_id, int $question_id)
@@ -280,6 +280,6 @@ class Teacher
             }
         }
 
-        require(dirname(__FILE__) . '/../views/teacher/question_delete_confirm.php');
+        require(dirname(__FILE__) . '/../views/teachers/question_delete_confirm.php');
     }
 }
