@@ -81,7 +81,51 @@ class Student
 
     public function studentInterests()
     {
-        //
+        $errors = array();
+        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $interested = array();
+        foreach ($user->student->interests as $interest) {
+            $interested[] = $interest->subject->getID();
+        }
+        $interests = \Tamnza\App\Classroom\Model\Subject::search();
+
+        if ($_POST) {
+            if (!isset($_POST['interests']) || count($_POST['interests']) == 0) {
+                $errors['interests'] = "This field is required.";
+            }
+
+            if (!$errors) {
+                // we add new
+                foreach ($_POST['interests'] as $interest_id) {
+                    if (!in_array($interest_id, $interested)) {
+                        $subject = \Tamnza\App\Classroom\Model\Subject::getByID(id: $interest_id);
+
+                        if ($subject != null) {
+                            $interest = new \Tamnza\App\Classroom\Model\InterestedStudent($user->student, $subject);
+                            $interest->save();
+                        }
+                    }
+                }
+
+                // we remove old
+                foreach ($interested as $interest_id) {
+                    if (!in_array($interest_id, $_POST['interests'])) {
+                        $subject = \Tamnza\App\Classroom\Model\Subject::getByID($interest_id);
+                        $interest = \Tamnza\App\Classroom\Model\InterestedStudent::search(student: $user->student, subject: $subject, limit: 1);
+
+                        if ($interest) {
+                            $interest[0]->delete();
+                        }
+                    }
+                }
+
+                // We redirect to the home page
+                $_SESSION['messages']['success'] = 'Interests updated with success! ';
+                return header("Location: " . $GLOBALS['router']->url("quiz_list"), true, 301);
+            }
+        }
+
+        require(dirname(__FILE__) . '/../views/students/interests_form.php');
     }
 
     public function takenQuizList()
