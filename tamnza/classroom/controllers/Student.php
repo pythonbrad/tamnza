@@ -67,4 +67,30 @@ class Student
 
         require(BASE_DIR . 'views/registration/signup_form.php');
     }
+
+    public function quizList()
+    {
+        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $quizzes = array();
+        foreach ($user->student->interests as $interest) {
+            $quizzes = array_merge($quizzes, $interest->subject->quizzes);
+        }
+
+        require(dirname(__FILE__) . '/../views/students/quiz_list.php');
+    }
+
+    public function studentInterests()
+    {
+        //
+    }
+
+    public function takenQuizList()
+    {
+        //
+    }
+
+    public function takeQuiz()
+    {
+        //
+    }
 }

@@ -12,7 +12,7 @@ class Classroom
             if ($_SESSION['is_teacher']) {
                  return header("Location: " . $GLOBALS['router']->url("quiz_change_list"), true, 301);
             } else {
-                echo "todo";
+                return header("Location: " . $GLOBALS['router']->url("quiz_list"), true, 301);
             }
         } else {
             require(dirname(__FILE__) . '/../views/home.php');

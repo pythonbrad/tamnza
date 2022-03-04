@@ -34,4 +34,8 @@ $routes = array(
     new Route("$path/teacher/quiz/<quiz_pk:int>/question/<question_pk:int>/delete", array($teacher, 'questionDelete'), name: 'question_delete'),
 
     # student menu
+    new Route("$path/student", array($student, 'quizList'), name: 'quiz_list'),
+    new Route("$path/student/interests", array($student, 'studentInterests'), name: 'student_interests'),
+    new Route("$path/student/taken", array($student, 'takenQuizList'), name: 'taken_quiz_list'),
+    new Route("$path/student/quiz/<pk:int>", array($student, 'takeQuiz'), name: 'taken_quiz'),
 );
