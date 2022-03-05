@@ -4,6 +4,10 @@ namespace Tamnza\App\Classroom\Controller;
 
 require_once(dirname(__FILE__) . '/../models/User.php');
 require_once(dirname(__FILE__) . '/../models/Subject.php');
+require_once(dirname(__FILE__) . '/../models/StudentAnswer.php');
+require_once(dirname(__FILE__) . '/../models/InterestedStudent.php');
+require_once(dirname(__FILE__) . '/../models/Answer.php');
+require_once(dirname(__FILE__) . '/../models/TakenQuiz.php');
 
 class Student
 {
@@ -136,8 +140,74 @@ class Student
         require(dirname(__FILE__) . '/../views/students/taken_quiz_list.php');
     }
 
-    public function takeQuiz()
+    public function takeQuiz(int $id)
     {
-        //
+        $errors = array();
+        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+
+        if (count(\Tamnza\App\Classroom\Model\TakenQuiz::search(quiz: $quiz, student: $user->student)) != 0) {
+            return header("Location: " . $GLOBALS['router']->url('taken_quiz_list'));
+        }
+
+        $unanswered_questions = array();
+        $answered_questions = array();
+
+        foreach ($user->student->quiz_answers as $quiz_answer) {
+            if ($quiz_answer->answer->question->quiz->getID() == $quiz->getID()) {
+                $answered_questions[] = $quiz_answer->answer->question;
+            }
+        }
+
+        $questions = $quiz->questions;
+
+        foreach ($questions as $question) {
+            if (!in_array($question, $answered_questions)) {
+                $unanswered_questions[] = $question;
+            }
+        }
+
+        # -1 because, normally the current question is supposed answer
+        $progress = 100 - round(((count($unanswered_questions) - 1) / count($questions)) * 100);
+
+        shuffle($unanswered_questions);
+        $question = $unanswered_questions[0] ?? null;
+
+        if ($_POST) {
+            if (!isset($_POST['answer'])) {
+                $errors['answer'] = 'This field is required.';
+            }
+            if (!$errors) {
+                $student_answer = new \Tamnza\App\Classroom\Model\StudentAnswer();
+                $student_answer->student = $user->student;
+                $student_answer->answer = \Tamnza\App\Classroom\Model\Answer::getByID($_POST['answer']);
+                if ($student_answer->save()) {
+                    if (count($unanswered_questions) == 1) {
+                        $correct_answers = array();
+                        foreach ($user->student->quiz_answers as $quiz_answer) {
+                            if ($quiz_answer->answer->question->quiz->getID() == $quiz->getID()) {
+                                if ($quiz_answer->answer->is_correct) {
+                                    $correct_answers[] = $quiz_answer->answer;
+                                }
+                            }
+                        }
+                        $score = round((count($correct_answers) / count($questions)) * 100.0, 2);
+                        $taken_quiz = new \Tamnza\App\Classroom\Model\TakenQuiz(student: $user->student, quiz: $quiz, score: $score);
+                        if ($taken_quiz->save()) {
+                            if ($score < 50.0) {
+                                $_SESSION['messages']['danger'] = 'Better luck next time! Your score for the quiz ' . $quiz->name . ' was ' . $score . '.';
+                            } else {
+                                $_SESSION['messages']['success'] = 'Congratulations! You completed the quiz ' . $quiz->name . ' with success! You scored ' . $score . ' points.';
+                            }
+                            return header("Location: " . $GLOBALS['router']->url('quiz_list'));
+                        }
+                    } else {
+                        return header("Location: " . $GLOBALS['router']->url('take_quiz', array('pk' => $id)));
+                    }
+                }
+            }
+        }
+
+        require(dirname(__FILE__) . '/../views/students/take_quiz_form.php');
     }
 }
