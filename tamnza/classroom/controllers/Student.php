@@ -178,6 +178,11 @@ class Student
             }
         }
 
+        if (count($questions) == 0 || count($unanswered_questions) == 0) {
+            $_SESSION['messages']['danger'] = 'Sorry!, the quiz ' . $quiz->name . ' is incomplete.';
+            return header("Location: " . $GLOBALS['router']->url('quiz_list'));
+        }
+
         # -1 because, normally the current question is supposed answer
         $progress = 100 - round(((count($unanswered_questions) - 1) / count($questions)) * 100);
 
