@@ -72,6 +72,6 @@ final class RouterTest extends TestCase
     {
         $router = $this->testAddWithComplexURL();
 
-        $this->assertEquals('/?url=/en/85/man-5/FDgfd/Fgf', $router->url('test', array('lang' => 'en', 'id' => 85, 'type' => 'man', 'ref' => 5, 'path' => 'FDgfd/Fgf')));
+        $this->assertEquals('?url=/en/85/man-5/FDgfd/Fgf', $router->url('test', array('lang' => 'en', 'id' => 85, 'type' => 'man', 'ref' => 5, 'path' => 'FDgfd/Fgf')));
     }
 }
