@@ -6,9 +6,11 @@ require(dirname(__FILE__) . '/controllers/Classroom.php');
 require(dirname(__FILE__) . '/controllers/Student.php');
 require(dirname(__FILE__) . '/controllers/Teacher.php');
 
-$classroom = new \Tamnza\App\Classroom\Controller\Classroom();
-$student = new \Tamnza\App\Classroom\Controller\Student();
-$teacher = new \Tamnza\App\Classroom\Controller\Teacher();
+use Tamnza\App\Classroom\Controller;
+
+$classroom = new Controller\Classroom();
+$student = new Controller\Student();
+$teacher = new Controller\Teacher();
 
 $routes = array(
     # home

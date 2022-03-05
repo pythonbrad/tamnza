@@ -9,6 +9,8 @@ require_once(dirname(__FILE__) . '/../models/InterestedStudent.php');
 require_once(dirname(__FILE__) . '/../models/Answer.php');
 require_once(dirname(__FILE__) . '/../models/TakenQuiz.php');
 
+use Tamnza\App\Classroom\Model;
+
 class Student
 {
     public function signup()
@@ -36,24 +38,24 @@ class Student
 
             if (!$errors) {
                 // We verify if the account username is free
-                $user = \Tamnza\App\Classroom\Model\User::search(username: $_POST['username']);
+                $user = Model\User::search(username: $_POST['username']);
                 //
                 if ($user) {
                     $errors['username'] = 'A user with that username already exists.';
                 } else {
-                    $user = new \Tamnza\App\Classroom\Model\User(
+                    $user = new Model\User(
                         username: $_POST['username'],
                         password: $_POST['password1']
                     );
                     if ($user->save()) {
-                        $student = new \Tamnza\App\Classroom\Model\Student($user);
+                        $student = new Model\Student($user);
                         $student->save();
 
                         foreach ($_POST['interests'] as $interest_id) {
-                            $subject = \Tamnza\App\Classroom\Model\Subject::getByID(id: $interest_id);
+                            $subject = Model\Subject::getByID(id: $interest_id);
 
                             if ($subject != null) {
-                                $interest = new \Tamnza\App\Classroom\Model\InterestedStudent($student, $subject);
+                                $interest = new Model\InterestedStudent($student, $subject);
                                 $interest->save();
                             }
                         }
@@ -67,14 +69,14 @@ class Student
         }
 
         $user_type = 'Student';
-        $interests = \Tamnza\App\Classroom\Model\Subject::search();
+        $interests = Model\Subject::search();
 
         require(BASE_DIR . 'views/registration/signup_form.php');
     }
 
     public function quizList()
     {
-        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $user = Model\User::getByID($_SESSION['user']);
         $quizzes = array();
         $taken_quizzes = array();
 
@@ -97,12 +99,12 @@ class Student
     public function studentInterests()
     {
         $errors = array();
-        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $user = Model\User::getByID($_SESSION['user']);
         $interested = array();
         foreach ($user->student->interests as $interest) {
             $interested[] = $interest->subject->getID();
         }
-        $interests = \Tamnza\App\Classroom\Model\Subject::search();
+        $interests = Model\Subject::search();
 
         if ($_POST) {
             if (!isset($_POST['interests']) || count($_POST['interests']) == 0) {
@@ -113,10 +115,10 @@ class Student
                 // we add new
                 foreach ($_POST['interests'] as $interest_id) {
                     if (!in_array($interest_id, $interested)) {
-                        $subject = \Tamnza\App\Classroom\Model\Subject::getByID(id: $interest_id);
+                        $subject = Model\Subject::getByID(id: $interest_id);
 
                         if ($subject != null) {
-                            $interest = new \Tamnza\App\Classroom\Model\InterestedStudent($user->student, $subject);
+                            $interest = new Model\InterestedStudent($user->student, $subject);
                             $interest->save();
                         }
                     }
@@ -125,8 +127,8 @@ class Student
                 // we remove old
                 foreach ($interested as $interest_id) {
                     if (!in_array($interest_id, $_POST['interests'])) {
-                        $subject = \Tamnza\App\Classroom\Model\Subject::getByID($interest_id);
-                        $interest = \Tamnza\App\Classroom\Model\InterestedStudent::search(student: $user->student, subject: $subject, limit: 1);
+                        $subject = Model\Subject::getByID($interest_id);
+                        $interest = Model\InterestedStudent::search(student: $user->student, subject: $subject, limit: 1);
 
                         if ($interest) {
                             $interest[0]->delete();
@@ -145,7 +147,7 @@ class Student
 
     public function takenQuizList()
     {
-        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $user = Model\User::getByID($_SESSION['user']);
         $taken_quizzes = $user->student->taken_quizzes;
 
         require(dirname(__FILE__) . '/../views/students/taken_quiz_list.php');
@@ -154,10 +156,10 @@ class Student
     public function takeQuiz(int $id)
     {
         $errors = array();
-        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
-        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+        $user = Model\User::getByID($_SESSION['user']);
+        $quiz = Model\Quiz::getByID($id);
 
-        if (count(\Tamnza\App\Classroom\Model\TakenQuiz::search(quiz: $quiz, student: $user->student)) != 0) {
+        if (count(Model\TakenQuiz::search(quiz: $quiz, student: $user->student)) != 0) {
             return header("Location: " . $GLOBALS['router']->url('taken_quiz_list'));
         }
 
@@ -189,9 +191,9 @@ class Student
                 $errors['answer'] = 'This field is required.';
             }
             if (!$errors) {
-                $student_answer = new \Tamnza\App\Classroom\Model\StudentAnswer();
+                $student_answer = new Model\StudentAnswer();
                 $student_answer->student = $user->student;
-                $student_answer->answer = \Tamnza\App\Classroom\Model\Answer::getByID($_POST['answer']);
+                $student_answer->answer = Model\Answer::getByID($_POST['answer']);
                 if ($student_answer->save()) {
                     if (count($unanswered_questions) == 1) {
                         $correct_answers = array();
@@ -203,7 +205,7 @@ class Student
                             }
                         }
                         $score = round((count($correct_answers) / count($questions)) * 100.0, 2);
-                        $taken_quiz = new \Tamnza\App\Classroom\Model\TakenQuiz(student: $user->student, quiz: $quiz, score: $score);
+                        $taken_quiz = new Model\TakenQuiz(student: $user->student, quiz: $quiz, score: $score);
                         if ($taken_quiz->save()) {
                             if ($score < 50.0) {
                                 $_SESSION['messages']['danger'] = 'Better luck next time! Your score for the quiz ' . $quiz->name . ' was ' . $score . '.';

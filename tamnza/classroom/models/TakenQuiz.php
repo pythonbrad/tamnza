@@ -5,6 +5,8 @@ namespace Tamnza\App\Classroom\Model;
 require_once('Student.php');
 require_once('Quiz.php');
 
+use Tamnza\Database;
+
 // Relationship between student and quiz
 class TakenQuiz
 {
@@ -19,7 +21,7 @@ class TakenQuiz
         $this->date = new \Datetime();
 
         // We config the dao
-        $this->dao = new \Tamnza\Database\BaseDAO(
+        $this->dao = new Database\BaseDAO(
             'classroom_takenquiz',
             'id',
             array('score', 'date', 'student_id', 'quiz_id'),

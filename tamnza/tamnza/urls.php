@@ -1,5 +1,7 @@
 <?php
 
+namespace Tamnza;
+
 $routes = array(
-    \Tamnza\Core\includes("$path", 'classroom/urls.php'),
+    Core\includes("$path", 'classroom/urls.php'),
 );

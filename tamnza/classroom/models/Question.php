@@ -5,6 +5,8 @@ namespace Tamnza\App\Classroom\Model;
 require_once('Quiz.php');
 require_once('Answer.php');
 
+use Tamnza\Database;
+
 class Question
 {
     private int $id = 0;
@@ -14,7 +16,7 @@ class Question
         public Quiz|null $quiz = null,
     ) {
         // We config the dao
-        $this->dao = new \Tamnza\Database\BaseDAO(
+        $this->dao = new Database\BaseDAO(
             'classroom_question',
             'id',
             array('text', 'quiz_id'),
