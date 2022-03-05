@@ -76,8 +76,19 @@ class Student
     {
         $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
         $quizzes = array();
+        $taken_quizzes = array();
+
+        foreach ($user->student->taken_quizzes as $taken_quiz) {
+            $taken_quizzes[] = $taken_quiz->quiz;
+        }
+
         foreach ($user->student->interests as $interest) {
-            $quizzes = array_merge($quizzes, $interest->subject->quizzes);
+            // We ignore the taken_quizzes
+            foreach ($interest->subject->quizzes as $quiz) {
+                if (!in_array($quiz, $taken_quizzes)) {
+                    $quizzes[] = $quiz;
+                }
+            }
         }
 
         require(dirname(__FILE__) . '/../views/students/quiz_list.php');
