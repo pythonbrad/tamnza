@@ -5,6 +5,8 @@ namespace Tamnza\App\Classroom\Model;
 require_once('Student.php');
 require_once('Subject.php');
 
+use Tamnza\Database;
+
 // Relationship between student and subject
 class InterestedStudent
 {
@@ -15,7 +17,7 @@ class InterestedStudent
         public Subject|null $subject = null,
     ) {
         // We config the dao
-        $this->dao = new \Tamnza\Database\BaseDAO(
+        $this->dao = new Database\BaseDAO(
             'classroom_student_interests',
             'id',
             array('student_id', 'subject_id'),

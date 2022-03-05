@@ -5,11 +5,13 @@ namespace Tamnza\App\Classroom\Model;
 require_once('Student.php');
 require_once('Quiz.php');
 
+use Tamnza\Database;
+
 class User
 {
     public \Datetime $date_joined;
     public \Datetime $last_login;
-    private \Tamnza\Database\BaseDAO $dao;
+    private Database\BaseDAO $dao;
     private int $id = 0;
 
     public function __construct(
@@ -25,7 +27,7 @@ class User
         $this->date_joined = new \Datetime();
         $this->last_login = new \Datetime();
         // We config the dao
-        $this->dao = new \Tamnza\Database\BaseDAO(
+        $this->dao = new Database\BaseDAO(
             'classroom_user',
             'id',
             array(

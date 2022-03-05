@@ -1,5 +1,7 @@
 <?php
 
+namespace Tamnza;
+
 $routes = array(
-    \Tamnza\Core\includes("$path/b", dirname(__FILE__) . '/urls2.php'),
+    Core\includes("$path/b", dirname(__FILE__) . '/urls2.php'),
 );

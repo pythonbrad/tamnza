@@ -1,19 +1,19 @@
 <?php
 
+namespace Tamnza;
+
 session_start();
 
 require('tamnza/autoloader.php');
 
-use Tamnza\Core\{Router, Route};
-
-$router = new Router($_GET['url'] ?? '/');
+$router = new Core\Router($_GET['url'] ?? '/');
 
 $routes = array(
-    \Tamnza\Core\includes("/", 'tamnza/urls.php'),
-    new Route('/error', function () {
+    Core\includes("/", 'tamnza/urls.php'),
+    new Core\Route('/error', function () {
         require(BASE_DIR . 'views/500.php');
     }, name: "error"),
-    new Route('<path:path>', function () {
+    new Core\Route('<path:path>', function () {
         require(BASE_DIR . 'views/404.php');
     }),
 );

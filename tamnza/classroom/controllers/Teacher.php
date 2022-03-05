@@ -8,6 +8,8 @@ require_once(dirname(__FILE__) . '/../models/Quiz.php');
 require_once(dirname(__FILE__) . '/../models/Question.php');
 require_once(dirname(__FILE__) . '/../models/Answer.php');
 
+use Tamnza\App\Classroom\Model;
+
 class Teacher
 {
     public function signup()
@@ -30,12 +32,12 @@ class Teacher
 
             if (!$errors) {
                 // We verify if the account username is free
-                $user = \Tamnza\App\Classroom\Model\User::search(username: $_POST['username']);
+                $user = Model\User::search(username: $_POST['username']);
                 //
                 if ($user) {
                     $errors['username'] = 'A user with that username already exists.';
                 } else {
-                    $user = new \Tamnza\App\Classroom\Model\User(
+                    $user = new Model\User(
                         username: $_POST['username'],
                         password: $_POST['password1'],
                         is_teacher: true,
@@ -56,7 +58,7 @@ class Teacher
 
     public function quizChangeList()
     {
-        $user = \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']);
+        $user = Model\User::getByID($_SESSION['user']);
         $quizzes = $user->quizzes;
         require(dirname(__FILE__) . '/../views/teachers/quiz_change_list.php');
     }
@@ -75,10 +77,10 @@ class Teacher
             }
 
             if (!$errors) {
-                $quiz = new \Tamnza\App\Classroom\Model\Quiz(
+                $quiz = new Model\Quiz(
                     name: $_POST['name'],
-                    owner: \Tamnza\App\Classroom\Model\User::getByID($_SESSION['user']),
-                    subject: \Tamnza\App\Classroom\Model\Subject::getByID($_POST['subject']),
+                    owner: Model\User::getByID($_SESSION['user']),
+                    subject: Model\Subject::getByID($_POST['subject']),
                 );
 
                 if ($quiz->save()) {
@@ -92,14 +94,14 @@ class Teacher
             }
         }
 
-        $subjects = \Tamnza\App\Classroom\Model\Subject::search();
+        $subjects = Model\Subject::search();
         require(dirname(__FILE__) . '/../views/teachers/quiz_add_form.php');
     }
 
     public function quizChange(int $id)
     {
         $errors = array();
-        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+        $quiz = Model\Quiz::getByID($id);
 
         if ($_POST) {
             // We verify if the form is valid
@@ -112,7 +114,7 @@ class Teacher
 
             if (!$errors) {
                 $quiz->name = $_POST['name'];
-                $quiz->subject = \Tamnza\App\Classroom\Model\Subject::getByID($_POST['subject']);
+                $quiz->subject = Model\Subject::getByID($_POST['subject']);
 
                 if ($quiz->save()) {
                     // We redirect to the home page
@@ -126,14 +128,14 @@ class Teacher
         }
 
         $questions = $quiz->questions;
-        $subjects = \Tamnza\App\Classroom\Model\Subject::search();
+        $subjects = Model\Subject::search();
 
         require(dirname(__FILE__) . '/../views/teachers/quiz_change_form.php');
     }
 
     public function quizResults(int $id)
     {
-        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+        $quiz = Model\Quiz::getByID($id);
         $taken_quizzes = $quiz->taken_quizzes;
         $total_score = 0.0;
         foreach ($taken_quizzes as $taken_quiz) {
@@ -146,7 +148,7 @@ class Teacher
     public function quizDelete(int $id)
     {
         $errors = array();
-        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($id);
+        $quiz = Model\Quiz::getByID($id);
 
         if ($_POST) {
             // to secure
@@ -162,7 +164,7 @@ class Teacher
     public function questionAdd(int $quiz_id)
     {
         $errors = array();
-        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($quiz_id);
+        $quiz = Model\Quiz::getByID($quiz_id);
 
         if ($_POST) {
             if (!isset($_POST['text']) || strlen($_POST['text']) == 0) {
@@ -171,7 +173,7 @@ class Teacher
 
             if (!$errors) {
                 // to secure
-                $question = new \Tamnza\App\Classroom\Model\Question(text: $_POST['text'], quiz: $quiz);
+                $question = new Model\Question(text: $_POST['text'], quiz: $quiz);
                 if ($question->save()) {
                     $_SESSION['messages']['success'] = 'You may now add answers/options to the question.';
                     return header("Location: " . $GLOBALS['router']->url("question_change", array('quiz_pk' => $quiz_id, 'question_pk' => $question->getID())), true, 301);
@@ -185,8 +187,8 @@ class Teacher
     public function questionChange(int $quiz_id, int $question_id)
     {
         $errors = array();
-        $quiz = \Tamnza\App\Classroom\Model\Quiz::getByID($quiz_id);
-        $question = \Tamnza\App\Classroom\Model\Question::getByID($question_id);
+        $quiz = Model\Quiz::getByID($quiz_id);
+        $question = Model\Question::getByID($question_id);
         $answers = array();
         $to_ignore = array();
 
@@ -203,7 +205,7 @@ class Teacher
 
         for ($i = 0; $i < 3 && ($length + $i) < 10; $i++) {
             $answer_id = -($i + 1);
-            $answer = new \Tamnza\App\Classroom\Model\Answer();
+            $answer = new Model\Answer();
             $answer->setID($answer_id);
             $answer->text = $_POST['answer-' . $answer_id . '-text'] ?? '';
             $answer->is_correct = ($_POST['answer-' . $answer_id . '-is_correct'] ?? '') == 'on';
@@ -245,7 +247,7 @@ class Teacher
                 if ($question->save()) {
                     foreach ($_POST['answer-ids'] as $answer_id) {
                         if ($_POST['answer-' . $answer_id . '-text']) {
-                            $answer = new \Tamnza\App\Classroom\Model\Answer();
+                            $answer = new Model\Answer();
                             $answer->text = $_POST['answer-' . $answer_id . '-text'];
                             $answer->is_correct = ($_POST['answer-' . $answer_id . '-is_correct'] ?? null) == 'on';
                             $answer->question = $question;
@@ -269,7 +271,7 @@ class Teacher
     public function questionDelete(int $quiz_id, int $question_id)
     {
         $errors = array();
-        $question = \Tamnza\App\Classroom\Model\Question::getByID($question_id);
+        $question = Model\Question::getByID($question_id);
         $quiz = $question->quiz;
 
         if ($_POST) {

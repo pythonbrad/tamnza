@@ -4,6 +4,8 @@ namespace Tamnza\App\Classroom\Controller;
 
 require_once(dirname(__FILE__) . '/../models/User.php');
 
+use Tamnza\App\Classroom\Model;
+
 class Classroom
 {
     public function home()
@@ -34,7 +36,7 @@ class Classroom
 
             if (!$errors) {
                 // We verify if the account credentials is correct
-                $user = \Tamnza\App\Classroom\Model\User::search(password: $_POST['password'], username: $_POST['username']);
+                $user = Model\User::search(password: $_POST['password'], username: $_POST['username']);
                 //
                 if ($user) {
                     // We save the auth

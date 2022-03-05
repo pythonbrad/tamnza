@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tamnza\Test\Core;
 
 use PHPUnit\Framework\TestCase;

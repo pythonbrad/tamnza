@@ -4,6 +4,8 @@ namespace Tamnza\App\Classroom\Model;
 
 require_once('InterestedStudent.php');
 
+use Tamnza\Database;
+
 class Subject
 {
     private int $id = 0;
@@ -13,7 +15,7 @@ class Subject
         public string $color = '',
     ) {
         // We config the dao
-        $this->dao = new \Tamnza\Database\BaseDAO(
+        $this->dao = new Database\BaseDAO(
             'classroom_subject',
             'id',
             array('name', 'color'),
