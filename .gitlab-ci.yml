@@ -1,0 +1,33 @@
+# This file is a template, and might need editing before it works on your project.
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/PHP.gitlab-ci.yml
+
+# Select image from https://hub.docker.com/_/php/
+image: php:8.1
+
+before_script:
+  # We install the dependencies
+  - sh ./.github/workflows/install_deps.sh
+
+# Set any variables we need
+variables:
+  # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
+  MYSQL_ROOT_HOST: localhost
+  MYSQL_DATABASE: tamnza
+  MYSQL_USERNAME: <username>
+  MYSQL_PASSWORD: <user_password>
+  # Configure test environment variables
+  PHPUNIT_CMD: php ./phpunit
+  counter: 5
+
+# Test
+test:
+  script:
+    # We start the database service
+    - sh ./.github/workflows/start_database.sh  
+    # We build the database
+    - sh ./.github/workflows/build_database.sh
+    # We run the tests
+    - sh ./test.sh
