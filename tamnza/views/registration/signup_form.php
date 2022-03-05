@@ -54,8 +54,8 @@
                         <div>
                             <?php foreach ($interests as $interest) { ?>
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" name="interests[]" value="<?= $interest->getID() ?>" id="id_interests_0">
-                                    <label class="form-check-label" for="id_interests_0"><?= $interest->name ?></label>
+                                    <input type="checkbox" class="form-check-input" name="interests[]" value="<?= $interest->getID() ?>" id="id_interests_<?= $interest->getID() ?>">
+                                    <label class="form-check-label" for="id_interests_<?= $interest->getID() ?>"><?= $interest->name ?></label>
                                 </div>
                             <?php } ?>
                         </div>
