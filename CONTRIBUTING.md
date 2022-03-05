@@ -14,7 +14,6 @@ Reviews are a great way to get familiar with the codebase.
 
 ## Pull request guidelines
 * **Create topic branches**. Never ever open a pull request from your master branch. **Ever!**
-* **Code against master branch**. Unless release specific, all Kodi development occurs in the `master` branch. If it needs backporting it can be done after it hits master.
 * **One topic branch per change**. Found something that needs fixing but is unrelated to the current work? Create a new topic branch and open another *pull request*.
 * **Use a coherent commit history**. Make sure each individual commit in your *pull request* is meaningful and organized in logical chunks. Tidy up and squash commits before submitting.
 * **Be descriptive, but concise**. The *pull request* and commits should have a useful title and follow the `[component(s)] Short description...` format. No, `[README.md] Update` is **not** descriptive enough. The *pull request* description should only contain information relevant to the change.
