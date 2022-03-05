@@ -1,0 +1,47 @@
+on:
+
+  push:
+  
+  schedule:
+    - cron: "*/5 * * * *"
+
+name: CI
+
+jobs:
+
+  unittest:
+
+    # Set any variables we need
+    env:
+      MYSQL_ROOT_HOST: localhost
+      MYSQL_DATABASE: tamnza
+      MYSQL_USERNAME: <username>
+      MYSQL_PASSWORD: <user_password>
+      PHPUNIT_CMD: php ./phpunit
+      counter: 5
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: php:8.1
+
+    steps:
+
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+
+    - name: Install dependencies
+      shell: bash
+      run: sh ./.github/workflows/install_deps.sh
+
+    - name: Start MySQL server
+      shell: bash
+      run: sh ./.github/workflows/start_database.sh
+
+    - name: Build the database
+      shell: bash
+      run: sh ./.github/workflows/build_database.sh
+
+    - name: Run Testsuite
+      run: sh ./test.sh
