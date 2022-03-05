@@ -26,7 +26,7 @@
         <?php foreach ($taken_quizzes as $taken_quiz) { ?>
           <tr>
             <td><?= $taken_quiz->student->user->username ?></td>
-            <td><?= $taken_quiz->date ?></td>
+            <td><?= $taken_quiz->date->format('Y-m-d H:i:s') ?></td>
             <td><?= $taken_quiz->score ?></td>
           </tr>
         <?php } ?>
