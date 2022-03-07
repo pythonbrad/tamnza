@@ -175,12 +175,15 @@ class Student
         $questions = $quiz->questions;
 
         foreach ($questions as $question) {
-            if (!in_array($question, $answered_questions)) {
+            if (count($question->answers) == 0) {
+                $_SESSION['messages']['danger'] = 'Sorry!, the quiz ' . $quiz->name . ' is incomplete.';
+                return header("Location: " . $GLOBALS['router']->url('quiz_list'));
+            } elseif (!in_array($question, $answered_questions)) {
                 $unanswered_questions[] = $question;
             }
         }
 
-        if (count($questions) == 0 || count($unanswered_questions) == 0) {
+        if (count($questions) == 0) {
             $_SESSION['messages']['danger'] = 'Sorry!, the quiz ' . $quiz->name . ' is incomplete.';
             return header("Location: " . $GLOBALS['router']->url('quiz_list'));
         }
