@@ -160,7 +160,7 @@ class Student
         $quiz = Model\Quiz::getByID($id);
 
         if (count(Model\TakenQuiz::search(quiz: $quiz, student: $user->student)) != 0) {
-            return header("Location: " . $GLOBALS['router']->url('taken_quiz_list'));
+            return header("Location: " . $GLOBALS['router']->url('taken_quiz_list'), true, 301);
         }
 
         $unanswered_questions = array();
@@ -177,7 +177,7 @@ class Student
         foreach ($questions as $question) {
             if (count($question->answers) == 0) {
                 $_SESSION['messages']['danger'] = 'Sorry!, the quiz ' . $quiz->name . ' is incomplete.';
-                return header("Location: " . $GLOBALS['router']->url('quiz_list'));
+                return header("Location: " . $GLOBALS['router']->url('quiz_list'), true, 301);
             } elseif (!in_array($question, $answered_questions)) {
                 $unanswered_questions[] = $question;
             }
@@ -185,7 +185,7 @@ class Student
 
         if (count($questions) == 0) {
             $_SESSION['messages']['danger'] = 'Sorry!, the quiz ' . $quiz->name . ' is incomplete.';
-            return header("Location: " . $GLOBALS['router']->url('quiz_list'));
+            return header("Location: " . $GLOBALS['router']->url('quiz_list'), true, 301);
         }
 
         # -1 because, normally the current question is supposed answer
@@ -220,10 +220,10 @@ class Student
                             } else {
                                 $_SESSION['messages']['success'] = 'Congratulations! You completed the quiz ' . $quiz->name . ' with success! You scored ' . $score . ' points.';
                             }
-                            return header("Location: " . $GLOBALS['router']->url('quiz_list'));
+                            return header("Location: " . $GLOBALS['router']->url('quiz_list'), true, 301);
                         }
                     } else {
-                        return header("Location: " . $GLOBALS['router']->url('take_quiz', array('pk' => $id)));
+                        return header("Location: " . $GLOBALS['router']->url('take_quiz', array('pk' => $id)), true, 301);
                     }
                 }
             }
