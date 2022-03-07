@@ -24,20 +24,29 @@ $routes = array(
     # main menu
     new Route("$path/student_signup", array($student, 'signup'), name: 'student_signup'),
     new Route("$path/teacher_signup", array($teacher, 'signup'), name: 'teacher_signup'),
-
-    # teacher menu
-    new Route("$path/teacher", array($teacher, 'quizChangeList'), name: 'quiz_change_list'),
-    new Route("$path/teacher/quiz/add", array($teacher, 'quizAdd'), name: 'quiz_add'),
-    new Route("$path/teacher/quiz/<pk:int>/change", array($teacher, 'quizChange'), name: 'quiz_change'),
-    new Route("$path/teacher/quiz/<pk:int>/results", array($teacher, 'quizResults'), name: 'quiz_results'),
-    new Route("$path/teacher/quiz/<pk:int>/delete", array($teacher, 'quizDelete'), name: 'quiz_delete'),
-    new Route("$path/teacher/quiz/<quiz_pk:int>/question/add", array($teacher, 'questionAdd'), name: 'question_add'),
-    new Route("$path/teacher/quiz/<quiz_pk:int>/question/<question_pk:int>", array($teacher, 'questionChange'), name: 'question_change'),
-    new Route("$path/teacher/quiz/<quiz_pk:int>/question/<question_pk:int>/delete", array($teacher, 'questionDelete'), name: 'question_delete'),
-
-    # student menu
-    new Route("$path/student", array($student, 'quizList'), name: 'quiz_list'),
-    new Route("$path/student/interests", array($student, 'studentInterests'), name: 'student_interests'),
-    new Route("$path/student/taken", array($student, 'takenQuizList'), name: 'taken_quiz_list'),
-    new Route("$path/student/quiz/<pk:int>", array($student, 'takeQuiz'), name: 'take_quiz'),
 );
+
+# This views require authentification
+if (isset($_SESSION['is_authenticated']) && $_SESSION['is_authenticated']) {
+    $routes = array_merge(
+        $routes,
+        # This views are function of the user type
+        $_SESSION['is_teacher'] ? array(
+            # teacher menu
+            new Route("$path/teacher", array($teacher, 'quizChangeList'), name: 'quiz_change_list'),
+            new Route("$path/teacher/quiz/add", array($teacher, 'quizAdd'), name: 'quiz_add'),
+            new Route("$path/teacher/quiz/<pk:int>/change", array($teacher, 'quizChange'), name: 'quiz_change'),
+            new Route("$path/teacher/quiz/<pk:int>/results", array($teacher, 'quizResults'), name: 'quiz_results'),
+            new Route("$path/teacher/quiz/<pk:int>/delete", array($teacher, 'quizDelete'), name: 'quiz_delete'),
+            new Route("$path/teacher/quiz/<quiz_pk:int>/question/add", array($teacher, 'questionAdd'), name: 'question_add'),
+            new Route("$path/teacher/quiz/<quiz_pk:int>/question/<question_pk:int>", array($teacher, 'questionChange'), name: 'question_change'),
+            new Route("$path/teacher/quiz/<quiz_pk:int>/question/<question_pk:int>/delete", array($teacher, 'questionDelete'), name: 'question_delete'),
+        ) : array(
+            # student menu
+            new Route("$path/student", array($student, 'quizList'), name: 'quiz_list'),
+            new Route("$path/student/interests", array($student, 'studentInterests'), name: 'student_interests'),
+            new Route("$path/student/taken", array($student, 'takenQuizList'), name: 'taken_quiz_list'),
+            new Route("$path/student/quiz/<pk:int>", array($student, 'takeQuiz'), name: 'take_quiz'),
+        )
+    );
+}
