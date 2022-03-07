@@ -20,7 +20,7 @@ require('_header.php')
       <tbody>
         <?php foreach ($taken_quizzes as $taken_quiz) { ?>
           <tr>
-            <td><?= $taken_quiz->quiz->name ?></td>
+            <td><?= htmlentities($taken_quiz->quiz->name) ?></td>
             <td><?= $taken_quiz->quiz->subject->getHtmlBadge() ?></td>
             <td><?= $taken_quiz->score ?></td>
           </tr>

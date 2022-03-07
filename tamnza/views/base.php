@@ -36,7 +36,7 @@
             </div>
             <div class="col-6 text-right">
             <?php if (isset($_SESSION['is_authenticated'])) { ?>
-                <p class="pt-3">Logged in as <strong><?= $_SESSION['username'] ?></strong>. <a href="<?= $GLOBALS['router']->url("logout") ?>">Log out</a>.</p>
+                <p class="pt-3">Logged in as <strong><?= htmlentities($_SESSION['username']) ?></strong>. <a href="<?= $GLOBALS['router']->url("logout") ?>">Log out</a>.</p>
             <?php } else { ?>
                 <a href="<?= $GLOBALS['router']->url("login") ?>" class="btn btn-light" role="button">Log in</a>
                 <a href="<?= $GLOBALS['router']->url("signup") ?>" class="btn btn-primary" role="button">Sign up</a>

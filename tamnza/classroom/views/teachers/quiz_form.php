@@ -3,7 +3,7 @@
             Name<span class="asteriskField">*</span>
           </label>
           <div class="">
-            <input name="name" autofocus="" autocapitalize="none" autocomplete="name" class="textinput textInput form-control <?= (isset($errors["name"])) ? "is-invalid" : "" ?>" required="" id="id_name" type="text" value="<?= isset($quiz) ? $quiz->name : "" ?>">
+            <input name="name" autofocus="" autocapitalize="none" autocomplete="name" class="textinput textInput form-control <?= (isset($errors["name"])) ? "is-invalid" : "" ?>" required="" id="id_name" type="text" value="<?= isset($quiz) ? htmlentities($quiz->name) : "" ?>">
             <?php if (isset($errors["name"])) { ?>
                 <p id="error_id_name" class="invalid-feedback"><strong><?= $errors["name"] ?></strong></p>
             <?php } ?>
@@ -17,7 +17,7 @@
             <select name="subject" class="select form-control" required="" id="id_subject">
               <option value="" selected="">---------</option>
               <?php foreach ($subjects as $subject) { ?>
-                <option value="<?= $subject->getID() ?>" <?= (isset($quiz) && $quiz->subject->getID() == $subject->getID()) ? 'selected' : '' ?>><?= $subject->name ?></option>
+                <option value="<?= $subject->getID() ?>" <?= (isset($quiz) && $quiz->subject->getID() == $subject->getID()) ? 'selected' : '' ?>><?= htmlentities($subject->name) ?></option>
               <?php } ?>
             </select>
             <?php if (isset($errors["subject"])) { ?>

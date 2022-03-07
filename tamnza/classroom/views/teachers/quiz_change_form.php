@@ -3,11 +3,11 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?= $quiz->name ?></li>
+      <li class="breadcrumb-item active" aria-current="page"><?= htmlentities($quiz->name) ?></li>
     </ol>
   </nav>
   <h2 class="mb-3">
-    <?= $quiz->name ?>
+    <?= htmlentities($quiz->name) ?>
     <a href="<?= $GLOBALS['router']->url('quiz_results', array('pk' => $quiz->getID())) ?>" class="btn btn-primary float-right">View results</a>
   </h2>
   <div class="row mb-3">
@@ -34,7 +34,7 @@
         <div class="list-group-item">
           <div class="row">
             <div class="col-10">
-              <a href="<?= $GLOBALS['router']->url('question_change', array('quiz_pk' => $quiz->getID(), 'question_pk' => $question->getID())) ?>"><?= $question->text ?></a>
+              <a href="<?= $GLOBALS['router']->url('question_change', array('quiz_pk' => $quiz->getID(), 'question_pk' => $question->getID())) ?>"><?= htmlentities($question->text) ?></a>
             </div>
             <div class="col-2">
               <?= count($question->answers) ?>

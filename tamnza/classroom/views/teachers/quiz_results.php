@@ -3,11 +3,11 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
-      <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></li>
+      <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= htmlentities($quiz->name) ?></a></li>
       <li class="breadcrumb-item active" aria-current="page">Results</li>
     </ol>
   </nav>
-  <h2 class="mb-3"><?= $quiz->name ?> Results</h2>
+  <h2 class="mb-3"><?= htmlentities($quiz->name) ?> Results</h2>
 
   <div class="card">
     <div class="card-header">
@@ -25,7 +25,7 @@
       <tbody>
         <?php foreach ($taken_quizzes as $taken_quiz) { ?>
           <tr>
-            <td><?= $taken_quiz->student->user->username ?></td>
+            <td><?= htmlentities($taken_quiz->student->user->username) ?></td>
             <td><?= $taken_quiz->date->format('Y-m-d H:i:s') ?></td>
             <td><?= $taken_quiz->score ?></td>
           </tr>

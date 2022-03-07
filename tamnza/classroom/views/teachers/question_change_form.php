@@ -3,11 +3,11 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change_list') ?>">My Quizzes</a></li>
-      <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></li>
-      <li class="breadcrumb-item active" aria-current="page"><?= $question->text ?></li>
+      <li class="breadcrumb-item"><a href="<?= $GLOBALS['router']->url('quiz_change', array('pk' => $quiz->getID())) ?>"><?= htmlentities($quiz->name) ?></a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?= htmlentities($question->text) ?></li>
     </ol>
   </nav>
-  <h2 class="mb-3"><?= $question->text ?></h2>
+  <h2 class="mb-3"><?= htmlentities($question->text) ?></h2>
   <form method="post" novalidate>
     <?php require('question_form.php') ?>
     <div class="card mb-3<?= isset($errors['answer']) ? "border-danger" : "" ?>">
@@ -38,11 +38,11 @@
                     Answer<span class="asteriskField">*</span>
                   </label>
                   <div class="">
-                    <input type="text" name="answer-<?= $answer->getID() ?>-text" maxlength="255" class="textinput textInput form-control <?= isset($errors["answer-" . $answer->getID() . '-text']) ? 'is-invalid' : '' ?>" id="id_answer-<?= $answer->getID() ?>-text" value="<?= $answer->text ?>">
+                    <input type="text" name="answer-<?= $answer->getID() ?>-text" maxlength="255" class="textinput textInput form-control <?= isset($errors["answer-" . $answer->getID() . '-text']) ? 'is-invalid' : '' ?>" id="id_answer-<?= $answer->getID() ?>-text" value="<?= htmlentities($answer->text) ?>">
                     <?php if (isset($errors["answer-" . $answer->getID() . '-text'])) { ?>
                       <p id="error_id_answer-<?= $answer->getID() ?>-text" class="invalid-feedback"><strong>This field is required.</strong></p>
                         <?php if ($answer->text) { ?>
-                          <p class="mb-0 mt-1"><small class="text-muted font-italic"><strong>Old answer:</strong> <?= $answer->text ?></small></p>
+                          <p class="mb-0 mt-1"><small class="text-muted font-italic"><strong>Old answer:</strong> <?= htmlentities($answer->text) ?></small></p>
                         <?php } ?>
                     <?php } ?>
                   </div>
