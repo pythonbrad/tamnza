@@ -59,10 +59,11 @@ final class UserTest extends TestCase
         $this->assertIsArray($user->quizzes);
     }
 
-    public function getStudent(): void
+    public function testGetStudent(): void
     {
+        // TODO
         $user = $this->testCreate();
 
-        $this->assertEquals($user->getID(), $user->student->user->getID());
+        $this->assertEquals($user->student, null);
     }
 }
