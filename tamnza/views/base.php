@@ -47,7 +47,7 @@
             <div class="card-body">
             <?php foreach ($_SESSION['messages'] ?? array() as $tag => $message) { ?>
                 <div class="alert alert-<?= $tag ?> alert-dismissible fade show" role="alert">
-                <?= $message ?>
+                <?= htmlentities($message) ?>
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
