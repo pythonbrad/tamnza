@@ -21,7 +21,7 @@ require('_header.php')
       <tbody>
         <?php foreach ($quizzes as $quiz) { ?>
           <tr>
-            <td class="align-middle"><?= $quiz->name ?></td>
+            <td class="align-middle"><?= htmlentities($quiz->name) ?></td>
             <td class="align-middle"><?= $quiz->subject->getHtmlBadge() ?></td>
             <td class="align-middle"><?= count($quiz->questions) ?> questions</td>
             <td class="text-right">

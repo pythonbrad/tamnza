@@ -11,7 +11,7 @@
         <?php foreach ($interests as $interest) { ?>
           <div class="form-check">
               <input type="checkbox" class="form-check-input" name="interests[]" value="<?= $interest->getID() ?>" id="id_interests_0" <?= in_array($interest->getID(), $interested) ? "checked" : '' ?>>
-              <label class="form-check-label" for="id_interests_0"><?= $interest->name ?></label>
+              <label class="form-check-label" for="id_interests_0"><?= htmlentities($interest->name) ?></label>
           </div>
         <?php } ?>
       </div>

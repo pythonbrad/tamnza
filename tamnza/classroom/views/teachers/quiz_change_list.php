@@ -20,7 +20,7 @@
       <tbody>
         <?php foreach ($quizzes as $quiz) { ?>
           <tr>
-            <td class="align-middle"><a href="<?= $GLOBALS['router']->url("quiz_change", array('pk' => $quiz->getID())) ?>"><?= $quiz->name ?></a></td>
+            <td class="align-middle"><a href="<?= $GLOBALS['router']->url("quiz_change", array('pk' => $quiz->getID())) ?>"><?= htmlentities($quiz->name) ?></a></td>
             <td class="align-middle"><?= $quiz->subject->getHtmlBadge() ?></td>
             <td class="align-middle"><?= count($quiz->questions) ?></td>
             <td class="align-middle"><?= count($quiz->taken_quizzes) ?></td>
