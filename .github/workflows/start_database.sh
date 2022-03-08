@@ -1,6 +1,6 @@
 mysqld_safe --skip-grant-tables &
 # We wait the complete
-while ! (mysqlshow && [ $counter -gt 0 ]);
+while ( ! mysqlshow && [ $counter -gt 0 ]);
 do
     counter=$(expr $counter - 1);
     sleep .1;
