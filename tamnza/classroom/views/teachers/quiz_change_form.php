@@ -42,7 +42,7 @@
           </div>
         </div>
       <?php } ?>
-      <?php if (!$questions) { ?>
+      <?php if (count($questions) == 0) { ?>
         <div class="list-group-item text-center">
           <p class="text-muted font-italic mb-0">You haven't created any questions yet. Go ahead and <a href="<?= $GLOBALS['router']->url('question_add', array('quiz_pk' => $quiz->getID())) ?>">add the first question</a>.</p>
         </div>

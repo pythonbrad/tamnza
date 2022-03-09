@@ -52,10 +52,10 @@
                             <p class="text text-danger"><strong><?= $errors['interests'] ?></strong></p>
                         <?php } ?>
                         <div>
-                            <?php foreach ($interests as $interest) { ?>
+                            <?php foreach ($subjects as $subject) { ?>
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" name="interests[]" value="<?= $interest->getID() ?>" id="id_interests_<?= $interest->getID() ?>">
-                                    <label class="form-check-label" for="id_interests_<?= $interest->getID() ?>"><?= htmlentities($interest->name) ?></label>
+                                    <input type="checkbox" class="form-check-input" name="interests[]" value="<?= $subject->getID() ?>" id="id_interests_<?= $subject->getID() ?>">
+                                    <label class="form-check-label" for="id_interests_<?= $subject->getID() ?>"><?= htmlentities($subject->name) ?></label>
                                 </div>
                             <?php } ?>
                         </div>
