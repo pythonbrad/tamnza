@@ -17,7 +17,16 @@ git clone https://github.com/pythonbrad/tamnza.git
 Create the database:
 
 ```bash
-mysql < tamnza/classroom/database.sql
+mysql <<< "CREATE DATABASE IF NOT EXISTS tamnza;"
+mysql -D tamnza < tamnza/classroom/database.sql
+```
+
+Create subjects (On Linux)
+
+```bash
+for subject in Nufi Ghomala Yemba Medumba; do
+    mysql -D tamnza <<< "INSERT INTO classroom_subject (id, name, color) VALUES (null, \"$subject\", \"green\")";
+done
 ```
 
 Finally, run the development server:

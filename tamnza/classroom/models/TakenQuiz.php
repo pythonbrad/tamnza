@@ -14,7 +14,7 @@ class TakenQuiz
     public \Datetime $date;
 
     public function __construct(
-        public int $score = 0,
+        public float $score = 0,
         public Student|null $student = null,
         public Quiz|null $quiz = null,
     ) {
@@ -55,7 +55,7 @@ class TakenQuiz
         }
     }
 
-    public static function search(int $id = null, int $score = null, \Datetime $date = null, Student $student = null, Quiz $quiz = null, int $limit = -1): array
+    public static function search(int $id = null, float $score = null, \Datetime $date = null, Student $student = null, Quiz $quiz = null, int $limit = -1): array
     {
         $taken_quiz = new TakenQuiz();
 
