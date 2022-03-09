@@ -1,12 +1,12 @@
 <?php
 
-namespace Tamnza\Test\Core;
+namespace Tamnza\Test\Model;
 
 use PHPUnit\Framework\TestCase;
 
-require_once(dirname(__FILE__) . '/../../tamnza/database.php');
-require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
-require_once(dirname(__FILE__) . '/../models/TakenQuiz.php');
+require_once(dirname(__FILE__) . '/../../../tamnza/database.php');
+require_once(dirname(__FILE__) . '/../../../tamnza/settings.php');
+require_once(dirname(__FILE__) . '/../../models/TakenQuiz.php');
 require_once('StudentTest.php');
 require_once('QuizTest.php');
 

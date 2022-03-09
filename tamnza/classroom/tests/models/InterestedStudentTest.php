@@ -1,22 +1,22 @@
 <?php
 
-namespace Tamnza\Test\Core;
+namespace Tamnza\Test\Model;
 
 use PHPUnit\Framework\TestCase;
 
-require_once(dirname(__FILE__) . '/../../tamnza/database.php');
-require_once(dirname(__FILE__) . '/../../tamnza/settings.php');
-require_once(dirname(__FILE__) . '/../models/StudentAnswer.php');
+require_once(dirname(__FILE__) . '/../../../tamnza/database.php');
+require_once(dirname(__FILE__) . '/../../../tamnza/settings.php');
+require_once(dirname(__FILE__) . '/../../models/InterestedStudent.php');
 require_once('StudentTest.php');
-require_once('AnswerTest.php');
+require_once('SubjectTest.php');
 
-final class StudentAnswerTest extends TestCase
+final class InterestedStudentTest extends TestCase
 {
-    public function testCreate(): \Tamnza\App\Classroom\Model\StudentAnswer
+    public function testCreate(): \Tamnza\App\Classroom\Model\InterestedStudent
     {
         $student = (new StudentTest())->testCreate();
-        $answer = (new AnswerTest())->testCreate();
-        $interested_student = new \Tamnza\App\Classroom\Model\StudentAnswer(student: $student, answer: $answer);
+        $subject = (new SubjectTest())->testCreate();
+        $interested_student = new \Tamnza\App\Classroom\Model\InterestedStudent(student: $student, subject: $subject);
 
         $this->assertEquals($interested_student->save(), true);
 
@@ -34,11 +34,11 @@ final class StudentAnswerTest extends TestCase
     {
         $interested_student = $this->testCreate();
 
-        $interested_student_copy = \Tamnza\App\Classroom\Model\StudentAnswer::getByID($interested_student->getID());
+        $interested_student_copy = \Tamnza\App\Classroom\Model\InterestedStudent::getByID($interested_student->getID());
 
         $this->assertEquals($interested_student->getID(), $interested_student_copy->getID());
         $this->assertEquals($interested_student->student->getID(), $interested_student_copy->student->getID());
-        $this->assertEquals($interested_student->answer->getID(), $interested_student_copy->answer->getID());
+        $this->assertEquals($interested_student->subject->getID(), $interested_student_copy->subject->getID());
     }
 
     public function testDelete(): void
