@@ -29,10 +29,8 @@ class Student
                 $errors['password2'] = "This field is required.";
             } else if ($_POST['password1'] != $_POST['password2']) {
                 $errors['password2'] = "The two password fields didn’t match.";
-            } else if (!$_POST['interests']) {
-                $errors['password2'] = "This field is required.";
             }
-            if (!isset($_POST['interests']) || count($_POST['interests']) == 0) {
+            if (!isset($_POST['interests']) || !is_array($_POST['interests']) || count($_POST['interests']) == 0) {
                 $errors['interests'] = "This field is required.";
             }
 
