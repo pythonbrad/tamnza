@@ -57,10 +57,13 @@ class Quiz
         $taken_quizzes = $this->taken_quizzes;
 
         foreach ($taken_quizzes as $taken_quiz) {
-            $total_score = $taken_quiz->score;
+            $total_score = $total_score + $taken_quiz->score;
         }
-
-        return $total_score ? ($total_score / count($taken_quizzes)) : $total_score;
+        if (count($taken_quizzes) != 0) {
+            return $total_score / count($taken_quizzes);
+        } else {
+            return 0.0;
+        }
     }
 
     public function save(): bool

@@ -137,11 +137,7 @@ class Teacher
     {
         $quiz = Model\Quiz::getByID($id);
         $taken_quizzes = $quiz->taken_quizzes;
-        $total_score = 0.0;
-        foreach ($taken_quizzes as $taken_quiz) {
-            $total_score = $taken_quiz->score;
-        }
-        $average_score = $total_score ? ($total_score / count($taken_quizzes)) : $total_score;
+        $average_score = $quiz->averageScore();
         require(dirname(__FILE__) . '/../views/teachers/quiz_results.php');
     }
 
@@ -192,6 +188,7 @@ class Teacher
         $answers = array();
         $to_ignore = array();
 
+        // We delete the answer removed
         foreach ($question->answers as $answer) {
             if (($_POST['answer-' . $answer->getID() . '-to-delete'] ?? '') == 'on') {
                 $answer->delete();
@@ -203,6 +200,7 @@ class Teacher
 
         $length = count($answers);
 
+        // We prepare the future answers
         for ($i = 0; $i < 3 && ($length + $i) < 10; $i++) {
             $answer_id = -($i + 1);
             $answer = new Model\Answer();
@@ -221,7 +219,9 @@ class Teacher
                 $correct_answers_num = 0;
                 $answers_num = 0;
                 foreach ($_POST['answer-ids'] as $answer_id) {
-                    if (($_POST['answer-' . $answer_id . '-is_correct'] ?? '') == 'on' && !in_array($answer_id, $to_ignore)) {
+                    if (in_array($answer_id, $to_ignore)) {
+                        continue;
+                    } elseif (($_POST['answer-' . $answer_id . '-is_correct'] ?? '') == 'on') {
                         $correct_answers_num++;
                         if (($_POST['answer-' . $answer_id . '-text'] ?? '') == '') {
                             $errors['answer-' . $answer_id . '-text'] = "This field is required.";

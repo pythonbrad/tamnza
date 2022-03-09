@@ -67,7 +67,7 @@ class Student
         }
 
         $user_type = 'Student';
-        $interests = Model\Subject::search();
+        $subjects = Model\Subject::search();
 
         require(BASE_DIR . 'views/registration/signup_form.php');
     }
@@ -75,7 +75,7 @@ class Student
     public function quizList()
     {
         $user = Model\User::getByID($_SESSION['user']);
-        $quizzes = array();
+        $not_taken_quizzes = array();
         $taken_quizzes = array();
 
         foreach ($user->student->taken_quizzes as $taken_quiz) {
@@ -86,7 +86,7 @@ class Student
             // We ignore the taken_quizzes
             foreach ($interest->subject->quizzes as $quiz) {
                 if (!in_array($quiz, $taken_quizzes)) {
-                    $quizzes[] = $quiz;
+                    $not_taken_quizzes[] = $quiz;
                 }
             }
         }
@@ -98,46 +98,41 @@ class Student
     {
         $errors = array();
         $user = Model\User::getByID($_SESSION['user']);
-        $interested = array();
+        $interest_ids = array();
         foreach ($user->student->interests as $interest) {
-            $interested[] = $interest->subject->getID();
+            $interest_ids[] = $interest->subject->getID();
         }
-        $interests = Model\Subject::search();
+
+        $subjects = Model\Subject::search();
 
         if ($_POST) {
-            if (!isset($_POST['interests']) || count($_POST['interests']) == 0) {
-                $errors['interests'] = "This field is required.";
-            }
-
-            if (!$errors) {
                 // we add new
-                foreach ($_POST['interests'] as $interest_id) {
-                    if (!in_array($interest_id, $interested)) {
-                        $subject = Model\Subject::getByID(id: $interest_id);
+            foreach ($_POST['interests'] as $interest_id) {
+                if (!in_array($interest_id, $interest_ids)) {
+                    $subject = Model\Subject::getByID(id: $interest_id);
 
-                        if ($subject != null) {
-                            $interest = new Model\InterestedStudent($user->student, $subject);
-                            $interest->save();
-                        }
+                    if ($subject != null) {
+                        $interest = new Model\InterestedStudent($user->student, $subject);
+                        $interest->save();
                     }
                 }
+            }
 
                 // we remove old
-                foreach ($interested as $interest_id) {
-                    if (!in_array($interest_id, $_POST['interests'])) {
-                        $subject = Model\Subject::getByID($interest_id);
-                        $interest = Model\InterestedStudent::search(student: $user->student, subject: $subject, limit: 1);
+            foreach ($interest_ids as $interest_id) {
+                if (!in_array($interest_id, $_POST['interests'])) {
+                    $subject = Model\Subject::getByID($interest_id);
+                    $interest = Model\InterestedStudent::search(student: $user->student, subject: $subject, limit: 1);
 
-                        if ($interest) {
-                            $interest[0]->delete();
-                        }
+                    if ($interest) {
+                        $interest[0]->delete();
                     }
                 }
-
-                // We redirect to the home page
-                $_SESSION['messages']['success'] = 'Interests updated with success! ';
-                return header("Location: " . $GLOBALS['router']->url("quiz_list"), true, 301);
             }
+
+            // We redirect to the home page
+            $_SESSION['messages']['success'] = 'Interests updated with success! ';
+            return header("Location: " . $GLOBALS['router']->url("quiz_list"), true, 301);
         }
 
         require(dirname(__FILE__) . '/../views/students/interests_form.php');
@@ -163,14 +158,25 @@ class Student
 
         $unanswered_questions = array();
         $answered_questions = array();
+        $correct_answers_count = 0;
 
         foreach ($user->student->quiz_answers as $quiz_answer) {
             if ($quiz_answer->answer->question->quiz->getID() == $quiz->getID()) {
-                $answered_questions[] = $quiz_answer->answer->question;
+                if (!in_array($quiz_answer->answer->question, $answered_questions)) {
+                    $answered_questions[] = $quiz_answer->answer->question;
+                }
+                if ($quiz_answer->answer->is_correct) {
+                    $correct_answers_count++;
+                }
             }
         }
 
         $questions = $quiz->questions;
+
+        if (count($questions) == 0) {
+            $_SESSION['messages']['danger'] = 'Sorry!, the quiz ' . $quiz->name . ' is incomplete.';
+            return header("Location: " . $GLOBALS['router']->url('quiz_list'), true, 301);
+        }
 
         foreach ($questions as $question) {
             if (count($question->answers) == 0) {
@@ -181,16 +187,12 @@ class Student
             }
         }
 
-        if (count($questions) == 0) {
-            $_SESSION['messages']['danger'] = 'Sorry!, the quiz ' . $quiz->name . ' is incomplete.';
-            return header("Location: " . $GLOBALS['router']->url('quiz_list'), true, 301);
-        }
-
         # -1 because, normally the current question is supposed answer
         $progress = 100 - round(((count($unanswered_questions) - 1) / count($questions)) * 100);
 
         shuffle($unanswered_questions);
-        $question = $unanswered_questions[0] ?? null;
+        # If the quiz is not taken, then we have questions to answer
+        $question = $unanswered_questions[0];
 
         if ($_POST) {
             if (!isset($_POST['answer'])) {
@@ -200,17 +202,15 @@ class Student
                 $student_answer = new Model\StudentAnswer();
                 $student_answer->student = $user->student;
                 $student_answer->answer = Model\Answer::getByID($_POST['answer']);
+
+                if ($student_answer->answer->is_correct) {
+                    $correct_answers_count++;
+                }
+
                 if ($student_answer->save()) {
+                    // We verify if the quiz is taken
                     if (count($unanswered_questions) == 1) {
-                        $correct_answers = array();
-                        foreach ($user->student->quiz_answers as $quiz_answer) {
-                            if ($quiz_answer->answer->question->quiz->getID() == $quiz->getID()) {
-                                if ($quiz_answer->answer->is_correct) {
-                                    $correct_answers[] = $quiz_answer->answer;
-                                }
-                            }
-                        }
-                        $score = round((count($correct_answers) / count($questions)) * 100.0, 2);
+                        $score = round(($correct_answers_count / count($questions)) * 100.0, 2);
                         $taken_quiz = new Model\TakenQuiz(student: $user->student, quiz: $quiz, score: $score);
                         if ($taken_quiz->save()) {
                             if ($score < 50.0) {
