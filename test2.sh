@@ -5,6 +5,8 @@
 
 HOST=localhost:8080
 COOKIE_JAR=/tmp/cookie
+TEACHER_COOKIE_JAR=/tmp/teacher_cookie
+STUDENT_COOKIE_JAR=/tmp/student_cookie
 HEADER=/tmp/header
 OUTPUT=/tmp/output
 
@@ -51,7 +53,8 @@ stop_server() {
 #######################################
 # Verify if the home page works.
 # Globals:
-#   None
+#   HOST
+#   COOKIE_JAR
 # Arguments:
 #   None
 #######################################
@@ -271,13 +274,13 @@ test_login() {
 # Verify if it's possible to login as teacher.
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 #   HEADER
 # Arguments:
 #   None
 #######################################
 test_login_teacher() {
-    if ! (curl $HOST/?url=/login --cookie-jar $COOKIE_JAR -d username=teacher\
+    if ! (curl $HOST/?url=/login --cookie-jar $TEACHER_COOKIE_JAR -d username=teacher\
      -d password=teacher -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && ! grep '^Location: ?url=/error' < $HEADER); then
@@ -287,7 +290,7 @@ test_login_teacher() {
     fi
 
     # We verify the home redirection
-    header=$(curl -I $HOST --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -300,13 +303,13 @@ test_login_teacher() {
 # Verify if it's possible to login as student.
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   STUDENT_COOKIE_JAR
 #   HEADER
 # Arguments:
 #   None
 #######################################
 test_login_student() {
-    if ! (curl $HOST/?url=/login --cookie-jar $COOKIE_JAR -d username=student\
+    if ! (curl $HOST/?url=/login --cookie-jar $STUDENT_COOKIE_JAR -d username=student\
      -d password=student -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && ! grep '^Location: ?url=/error' < $HEADER); then
@@ -316,7 +319,7 @@ test_login_student() {
     fi
 
     # We verify the login
-    header=$(curl -I $HOST --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST --cookie $STUDENT_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -329,19 +332,19 @@ test_login_student() {
 # Verify if the teacher home page works.
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 # Arguments:
 #   None
 #######################################
 test_teacher_home_without_quiz() {
-    if (curl $HOST?url=/teacher --cookie $COOKIE_JAR -s --show-error\
+    if (curl $HOST?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '?url=/teacher/quiz/[0-9]*/change'); then
         return 1
     fi
 }
 
 test_teacher_home_with_quiz() {
-    if ! (curl $HOST?url=/teacher --cookie $COOKIE_JAR -s --show-error\
+    if ! (curl $HOST?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '?url=/teacher/quiz/[0-9]*/change'); then
         return 1
     fi
@@ -351,13 +354,13 @@ test_teacher_home_with_quiz() {
 # Verify if it's possible to add a quiz
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 #   HEADER
 # Arguments:
 #   None
 #######################################
 test_add_quiz() {
-    header=$(curl -I $HOST/?url=/teacher/quiz/add --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST/?url=/teacher/quiz/add --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -367,7 +370,7 @@ test_add_quiz() {
 
     # Wrong data
     if ! (curl $HOST/?url=/teacher/quiz/add -d name -d subject\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
         cat $OUTPUT
@@ -375,7 +378,7 @@ test_add_quiz() {
     fi
 
     # We select one subject
-    subject=$(curl $HOST/?url=/teacher/quiz/add --cookie $COOKIE_JAR -s --show-error\
+    subject=$(curl $HOST/?url=/teacher/quiz/add --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | sort\
      | grep '<option.*</option>' -o -m 1\
      | sed 's/.*="//'\
@@ -383,7 +386,7 @@ test_add_quiz() {
 
     # Success
     if ! (curl $HOST/?url=/teacher/quiz/add -d name=quiz -d subject=$subject\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher/quiz/[0-9]*/change' < $HEADER); then
         cat $HEADER
@@ -393,26 +396,40 @@ test_add_quiz() {
 }
 
 #######################################
+# Get a quiz
+# Globals:
+#   HOST
+#   TEACHER_COOKIE_JAR
+# Arguments:
+#   None
+# Output:
+#   None | String
+#######################################
+get_quiz() {
+    curl $HOST/?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
+     | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
+     | sed 's/.*z\///'\
+     | sed 's/\/.*//'
+}
+
+#######################################
 # Verify if it's possible to modify a quiz
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 #   HEADER
 # Arguments:
 #   None
 #######################################
 test_change_quiz() {
     # We select one quiz
-    quiz=$(curl $HOST/?url=/teacher --cookie $COOKIE_JAR -s --show-error\
-     | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
-     | sed 's/.*z\///'\
-     | sed 's/\/.*//')
+    quiz=$(get_quiz)
 
     if [ -z $quiz ]; then
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/change --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/change --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -422,7 +439,7 @@ test_change_quiz() {
 
     # Wrong data
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/change -d name -d subject\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
         cat $OUTPUT
@@ -431,7 +448,7 @@ test_change_quiz() {
 
     # Success
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/change -d name=quiz -d subject=$subject\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher/quiz/[0-9]*/change' < $HEADER); then
         cat $HEADER
@@ -444,22 +461,19 @@ test_change_quiz() {
 # Verify if the quiz result page works.
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 # Arguments:
 #   None
 #######################################
 test_quiz_result_without_respondents() {
     # We select one quiz
-    quiz=$(curl $HOST/?url=/teacher --cookie $COOKIE_JAR -s --show-error\
-     | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
-     | sed 's/.*z\///'\
-     | sed 's/\/.*//')
+    quiz=$(get_quiz)
 
     if [ -z $quiz ]; then
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/results --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -467,7 +481,7 @@ test_quiz_result_without_respondents() {
         return 2
     fi
 
-    if ! (curl $HOST?url=/teacher/quiz/$quiz/results --cookie $COOKIE_JAR -s --show-error\
+    if ! (curl $HOST?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '<strong>0</strong>'); then
         return 3
     fi
@@ -475,16 +489,13 @@ test_quiz_result_without_respondents() {
 
 test_quiz_result_with_respondents() {
     # We select one quiz
-    quiz=$(curl $HOST/?url=/teacher --cookie $COOKIE_JAR -s --show-error\
-     | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
-     | sed 's/.*z\///'\
-     | sed 's/\/.*//')
+    quiz=$(get_quiz)
 
     if [ -z $quiz ]; then
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/results --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -492,7 +503,7 @@ test_quiz_result_with_respondents() {
         return 2
     fi
 
-    if (curl $HOST?url=/teacher/quiz/$quiz/results --cookie $COOKIE_JAR -s --show-error\
+    if (curl $HOST?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '<strong>0</strong>'); then
         return 3
     fi
@@ -502,23 +513,20 @@ test_quiz_result_with_respondents() {
 # Verify if it's possible to delete a quiz.
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 #   HEADER
 # Arguments:
 #   None
 #######################################
 test_delete_quiz() {
     # We select one quiz
-    quiz=$(curl $HOST/?url=/teacher --cookie $COOKIE_JAR -s --show-error\
-     | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
-     | sed 's/.*z\///'\
-     | sed 's/\/.*//')
+    quiz=$(get_quiz)
 
     if [ -z $quiz ]; then
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/delete --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/delete --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -526,8 +534,8 @@ test_delete_quiz() {
         return 2
     fi
 
-    if (curl $HOST?url=/teacher/quiz/$quiz/delete --data-raw ''\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+    if ! (curl $HOST?url=/teacher/quiz/$quiz/delete --data-raw 'null'\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher' < $HEADER); then
         cat $HEADER
@@ -540,23 +548,20 @@ test_delete_quiz() {
 # Verify if it's possible to add a question
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 #   HEADER
 # Arguments:
 #   None
 #######################################
 test_add_question() {
     # We select one quiz
-    quiz=$(curl $HOST/?url=/teacher --cookie $COOKIE_JAR -s --show-error\
-     | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
-     | sed 's/.*z\///'\
-     | sed 's/\/.*//')
+    quiz=$(get_quiz)
 
     if [ -z $quiz ]; then
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/question/add --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/question/add --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -566,7 +571,7 @@ test_add_question() {
 
     # Wrong data
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/add -d text\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
         cat $OUTPUT
@@ -575,7 +580,7 @@ test_add_question() {
 
     # Success
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/add -d text=text\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher/quiz/[0-9]*/question/[0-9]*' < $HEADER); then
         cat $HEADER
@@ -585,35 +590,46 @@ test_add_question() {
 }
 
 #######################################
+# Get one question
+# Globals:
+#   HOST
+#   TEACHER_COOKIE_JAR
+# Arguments:
+#   None
+# Ouput:
+#   None | String
+#######################################
+get_question() {
+    curl $HOST/?url=/teacher/quiz/$quiz/change --cookie $TEACHER_COOKIE_JAR -s --show-error\
+     | grep "?url=/teacher/quiz/$quiz/question/[0-9]*" -o -m 1\
+     | sed 's/.*n\///'
+}
+
+#######################################
 # Verify if it's possible to change a question
 # Globals:
 #   HOST
-#   COOKIE_JAR
+#   TEACHER_COOKIE_JAR
 #   HEADER
 # Arguments:
 #   None
 #######################################
 test_change_question() {
     # We select one quiz
-    quiz=$(curl $HOST/?url=/teacher --cookie $COOKIE_JAR -s --show-error\
-     | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
-     | sed 's/.*z\///'\
-     | sed 's/\/.*//')
+    quiz=$(get_quiz)
 
     if [ -z $quiz ]; then
         return 1
     fi
 
     # We select one question
-    question=$(curl $HOST/?url=/teacher/quiz/$quiz/change --cookie $COOKIE_JAR -s --show-error\
-     | grep "?url=/teacher/quiz/$quiz/question/[0-9]*" -o -m 1\
-     | sed 's/.*n\///')
+    question=$(get_question)
 
     if [ -z $question ]; then
         return 2
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/question/$question --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/question/$question --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -623,7 +639,7 @@ test_change_question() {
 
     # Wrong data
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question -d text\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
         cat $OUTPUT
@@ -633,7 +649,7 @@ test_change_question() {
     # 1 answer left
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question\
      -d text=text --data-raw 'answer-ids[]=-1' -d answer--1-text=answer-1\
-     -d answer--1-is_correct=on --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     -d answer--1-is_correct=on --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
         cat $OUTPUT
@@ -644,7 +660,7 @@ test_change_question() {
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question\
      -d text=text --data-raw 'answer-ids[]=-1&answer-ids[]=-2'\
      -d answer--1-text=answer-1 -d answer--2-text=answer-2\
-     --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
         cat $OUTPUT
@@ -655,9 +671,9 @@ test_change_question() {
     if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question\
      -d text=text --data-raw 'answer-ids[]=-1&answer-ids[]=-2'\
      -d answer--1-text=answer-1 -d answer--2-text=answer-2\
-     -d answer--1-is_correct=on --cookie $COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
+     -d answer--1-is_correct=on --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
-      && grep 'Location: ?url=/teacher/quiz/[0-9]*/change' < $HEADER); then
+      && grep '^Location: ?url=/teacher/quiz/[0-9]*/change' < $HEADER); then
         cat $HEADER
         cat $OUTPUT
         return 7
