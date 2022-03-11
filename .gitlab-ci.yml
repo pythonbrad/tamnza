@@ -9,7 +9,7 @@ image: php:8.1
 
 before_script:
   # We install the dependencies
-  - sh ./.github/workflows/install_deps.sh
+  - ./.github/workflows/install_deps.sh
 
 # Set any variables we need
 variables:
@@ -20,14 +20,17 @@ variables:
   MYSQL_PASSWORD: <user_password>
   # Configure test environment variables
   PHPUNIT_CMD: php ./phpunit
-  counter: 5
 
 # Test
 test:
   script:
     # We start the database service
-    - sh ./.github/workflows/start_database.sh  
+    - ./.github/workflows/start_database.sh
     # We build the database
-    - sh ./.github/workflows/build_database.sh
+    - ./.github/workflows/build_database.sh
     # We run the tests
-    - sh ./test.sh
+    - ./test.sh
+    # Removing all the user input for the next step
+    - bash -c "mysql -D tamnza <<< 'DELETE FROM classroom_user;'"
+    # We run Application Testsuite
+    - ./test2.sh

@@ -18,7 +18,6 @@ jobs:
       MYSQL_USERNAME: <username>
       MYSQL_PASSWORD: <user_password>
       PHPUNIT_CMD: php ./phpunit
-      counter: 5
 
     runs-on: ubuntu-latest
 
@@ -32,16 +31,19 @@ jobs:
         fetch-depth: 1
 
     - name: Install dependencies
-      shell: bash
-      run: sh ./.github/workflows/install_deps.sh
+      run: ./.github/workflows/install_deps.sh
 
     - name: Start MySQL server
-      shell: bash
-      run: sh ./.github/workflows/start_database.sh
+      run: ./.github/workflows/start_database.sh
 
     - name: Build the database
-      shell: bash
-      run: sh ./.github/workflows/build_database.sh
+      run: ./.github/workflows/build_database.sh
 
     - name: Run Testsuite
-      run: sh ./test.sh
+      run: ./test.sh
+
+    - name: Removing all the user input for the next step
+      run: bash -c "mysql -D tamnza <<< 'DELETE FROM classroom_user;'"
+
+    - name: Run Application Testsuite
+      run: ./test2.sh
