@@ -24,7 +24,7 @@ start_server() {
     # We wait the PHP server to start
     counter=3
 
-    while ( ! pidof php && [ $counter -gt 0 ]); do
+    while ( ! curl -I -s --show-error $HOST && [ $counter -gt 0 ]); do
         counter=$(expr $counter - 1)
         sleep .5
         echo Retry \($counter\)...
@@ -964,6 +964,8 @@ stop_server
 
 start_test
 
+err_code=$?
+
 stop_server
 
-exit $?
+exit $err_code
