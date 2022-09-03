@@ -14,10 +14,10 @@ before_script:
 # Set any variables we need
 variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
-  MYSQL_ROOT_HOST: localhost
+  MYSQL_HOST: localhost
   MYSQL_DATABASE: tamnza
-  MYSQL_USERNAME: <username>
-  MYSQL_PASSWORD: <user_password>
+  MYSQL_USERNAME: root
+  MYSQL_PASSWORD: secret
   # Configure test environment variables
   PHPUNIT_CMD: php ./phpunit
 

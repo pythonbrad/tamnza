@@ -18,11 +18,11 @@ define('DATABASES', array(
     ),*/
     'default' => array(
         'ENGINE' => 'mysql',
-        'NAME' => 'tamnza',
-        'HOST' => '127.0.0.1',
+        'NAME' => $_ENV['MYSQL_DATABASE'],
+        'HOST' => $_ENV['MYSQL_HOST'],
         'PORT' => '3306',
-        'USERNAME' => '<username>',
-        'PASSWORD' => '<user_password>',
+        'USERNAME' => $_ENV['MYSQL_USERNAME'],
+        'PASSWORD' => $_ENV['MYSQL_PASSWORD'],
     ),
 ));
 

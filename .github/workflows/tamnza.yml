@@ -13,10 +13,10 @@ jobs:
 
     # Set any variables we need
     env:
-      MYSQL_ROOT_HOST: localhost
+      MYSQL_HOST: localhost
       MYSQL_DATABASE: tamnza
-      MYSQL_USERNAME: <username>
-      MYSQL_PASSWORD: <user_password>
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: secret
       PHPUNIT_CMD: php ./phpunit
 
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
       run: ./test.sh
 
     - name: Removing all the user input for the next step
-      run: bash -c "mysql -D tamnza <<< 'DELETE FROM classroom_user;'"
+      run: bash -c "mysql -D $MYSQL_DATABASE <<< 'DELETE FROM classroom_user;'"
 
     - name: Run Application Testsuite
       run: ./test2.sh
