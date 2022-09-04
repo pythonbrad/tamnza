@@ -16,8 +16,9 @@ variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
   MYSQL_ROOT_HOST: localhost
   MYSQL_DATABASE: tamnza
-  MYSQL_USERNAME: <username>
-  MYSQL_PASSWORD: <user_password>
+  MYSQL_USERNAME: root
+  MYSQL_PASSWORD: secret
+  TAMNZA_HOST: 127.0.0.1:8080
   # Configure test environment variables
   PHPUNIT_CMD: php ./phpunit
 
@@ -28,9 +29,9 @@ test:
     - ./.github/workflows/start_database.sh
     # We build the database
     - ./.github/workflows/build_database.sh
-    # We run the tests
+    # We run the backend tests
     - ./test.sh
     # Removing all the user input for the next step
-    - bash -c "mysql -D tamnza <<< 'DELETE FROM classroom_user;'"
-    # We run Application Testsuite
+    - bash -c "mysql -D $MYSQL_DATABASE <<< 'DELETE FROM classroom_user;'"
+    # We run frontend tests
     - ./test2.sh
