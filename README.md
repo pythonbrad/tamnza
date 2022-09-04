@@ -57,7 +57,10 @@ php -S 127.0.0.1:8000
 
 The project will be available at **127.0.0.1:8000**.
 
-# Overview
+## Why not a docker image
+Our docker image is available on [Docker Hub](https://hub.docker.com/r/pythonbrad/tamnza)
+
+## Overview
 ![Overview](https://github.com/pythonbrad/tamnza/blob/dev/overview.png)
 
 ## License
