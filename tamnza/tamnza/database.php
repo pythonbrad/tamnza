@@ -99,4 +99,9 @@ class BaseDAO
         $sql = 'DELETE FROM ' . $this->tb_name . ' WHERE ' . $this->pk . '=' . $id . ';';
         return self::$db->prepare($sql)->execute();
     }
+
+    public function exec(string $sql)
+    {
+        self::$db->exec($sql);
+    }
 }

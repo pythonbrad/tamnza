@@ -13,13 +13,24 @@ jobs:
 
     # Set any variables we need
     env:
-      MYSQL_ROOT_HOST: localhost
+      MYSQL_ROOT_HOST: mysql
       MYSQL_DATABASE: tamnza
-      MYSQL_USERNAME: <username>
-      MYSQL_PASSWORD: <user_password>
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: secret
+      TAMNZA_HOST: 127.0.0.1:8080
       PHPUNIT_CMD: php ./phpunit
 
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: tamnza
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     container:
       image: php:8.1
@@ -31,19 +42,23 @@ jobs:
         fetch-depth: 1
 
     - name: Install dependencies
-      run: ./.github/workflows/install_deps.sh
+      run: |
+        apt-get update -yq
+        apt-get install -yq wget libonig-dev curl
+        # Install PHP extensions
+        docker-php-ext-install mbstring pdo_mysql
+        wget -q -O phpunit https://phar.phpunit.de/phpunit-9.phar
 
-    - name: Start MySQL server
-      run: ./.github/workflows/start_database.sh
+    - name: Init database
+      run : php ./tamnza/tamnza/initdb.php
 
-    - name: Build the database
-      run: ./.github/workflows/build_database.sh
-
-    - name: Run Testsuite
+    - name: Run backend test
       run: ./test.sh
 
-    - name: Removing all the user input for the next step
-      run: bash -c "mysql -D tamnza <<< 'DELETE FROM classroom_user;'"
+    - name: Clean the database and load dummy data
+      run: |
+        php ./tamnza/tamnza/initdb.php
+        php ./tamnza/tamnza/initdummydata.php
 
-    - name: Run Application Testsuite
+    - name: Run frontend test
       run: ./test2.sh

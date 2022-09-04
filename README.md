@@ -18,15 +18,35 @@ Create the database:
 
 ```bash
 mysql <<< "CREATE DATABASE IF NOT EXISTS tamnza;"
-mysql -D tamnza < tamnza/classroom/database.sql
 ```
 
-Create subjects (On Linux)
+Initialize database:
+
+```bash
+php ./tamnza/tamnza/initdb.php
+```
+
+Load dummy data:
+
+```bash
+php ./tamnza/tamnza/initdummydata.php
+```
+
+Add more subject (On Linux) (Optional)
 
 ```bash
 for subject in Nufi Ghomala Yemba Medumba; do
     mysql -D tamnza <<< "INSERT INTO classroom_subject (id, name, color) VALUES (null, \"$subject\", \"green\")";
 done
+```
+
+Set your environment (On Linux)
+
+```bash
+MYSQL_DATABASE=tamnza
+MYSQL_ROOT_HOST=localhost
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=secret
 ```
 
 Finally, run the development server:
