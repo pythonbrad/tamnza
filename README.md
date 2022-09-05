@@ -18,15 +18,35 @@ Create the database:
 
 ```bash
 mysql <<< "CREATE DATABASE IF NOT EXISTS tamnza;"
-mysql -D tamnza < tamnza/classroom/database.sql
 ```
 
-Create subjects (On Linux)
+Initialize database:
+
+```bash
+php ./tamnza/tamnza/initdb.php
+```
+
+Load dummy data:
+
+```bash
+php ./tamnza/tamnza/initdummydata.php
+```
+
+Add more subject (On Linux) (Optional)
 
 ```bash
 for subject in Nufi Ghomala Yemba Medumba; do
     mysql -D tamnza <<< "INSERT INTO classroom_subject (id, name, color) VALUES (null, \"$subject\", \"green\")";
 done
+```
+
+Set your environment (On Linux)
+
+```bash
+MYSQL_DATABASE=tamnza
+MYSQL_ROOT_HOST=localhost
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=secret
 ```
 
 Finally, run the development server:
@@ -37,7 +57,10 @@ php -S 127.0.0.1:8000
 
 The project will be available at **127.0.0.1:8000**.
 
-# Overview
+## Why not a docker image
+Our docker image is available on [Docker Hub](https://hub.docker.com/r/pythonbrad/tamnza)
+
+## Overview
 ![Overview](https://github.com/pythonbrad/tamnza/blob/dev/overview.png)
 
 ## License

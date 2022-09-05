@@ -1,3 +1,14 @@
+<?php
+
+/*
+	This script permit to initialize the database
+*/
+
+require 'autoloader.php';
+
+$db = new Tamnza\Database\BaseDAO('', '', []);
+
+$db->exec("
 CREATE TABLE IF NOT EXISTS classroom_user (
 	id INTEGER AUTO_INCREMENT,
 	password VARCHAR(128) NOT NULL,
@@ -89,3 +100,17 @@ CREATE TABLE IF NOT EXISTS classroom_php_session (
 	PRIMARY KEY (session_key)
 );
 
+# We clean the database
+SET SESSION foreign_key_checks=OFF;
+TRUNCATE classroom_user;
+TRUNCATE classroom_subject;
+TRUNCATE classroom_student;
+TRUNCATE classroom_student_interests;
+TRUNCATE classroom_quiz;
+TRUNCATE classroom_question;
+TRUNCATE classroom_answer;
+TRUNCATE classroom_takenquiz;
+TRUNCATE classroom_studentanswer;
+TRUNCATE classroom_php_session;
+SET SESSION foreign_key_checks=ON;
+");

@@ -3,7 +3,6 @@
 # Perform some verification on the Tamnza project.
 # NB: The purpose of this script is to verify the working of the controllers.
 
-HOST=localhost:8080
 COOKIE_JAR=/tmp/cookie
 TEACHER_COOKIE_JAR=/tmp/teacher_cookie
 STUDENT_COOKIE_JAR=/tmp/student_cookie
@@ -19,12 +18,12 @@ OUTPUT=/tmp/output
 #######################################
 start_server() {
     # Start the PHP Server
-    php -S $HOST -t tamnza &
+    php -S $TAMNZA_HOST -t tamnza &
 
     # We wait the PHP server to start
     counter=3
 
-    while ( ! curl -I -s --show-error $HOST && [ $counter -gt 0 ]); do
+    while ( ! curl -I -s --show-error $TAMNZA_HOST && [ $counter -gt 0 ]); do
         counter=$(expr $counter - 1)
         sleep .5
         echo Retry \($counter\)...
@@ -59,7 +58,7 @@ stop_server() {
 #   None
 #######################################
 test_connect() {
-    header=$(curl -I $HOST --cookie-jar $COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST --cookie-jar $COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header"
     echo '--------------'
@@ -78,7 +77,7 @@ test_connect() {
 #######################################
 test_session() {
     # We verify if the server set a cookie
-    header=$(curl -I $HOST --cookie $COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST --cookie $COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -95,7 +94,7 @@ test_session() {
 #   None
 #######################################
 test_404() {
-    header=$(curl -I $HOST/?url=/a/b/c/d -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/a/b/c/d -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -112,7 +111,7 @@ test_404() {
 #   None
 #######################################
 test_500() {
-    header=$(curl -I $HOST/?url=/error -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/error -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -129,7 +128,7 @@ test_500() {
 #   None
 #######################################
 test_signup() {
-    header=$(curl -I $HOST/?url=/signup -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/signup -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -148,7 +147,7 @@ test_signup() {
 #   None
 #######################################
 test_signup_teacher() {
-    header=$(curl -I $HOST/?url=/teacher_signup -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher_signup -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -157,7 +156,7 @@ test_signup_teacher() {
     fi
 
     # Both password don't match
-    if ! (curl $HOST/?url=/teacher_signup -d username=teacher\
+    if ! (curl $TAMNZA_HOST/?url=/teacher_signup -d username=teacher\
      -d password1=teacher -d password2=wrong -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
@@ -166,7 +165,7 @@ test_signup_teacher() {
     fi
 
     # Success
-    if ! (curl $HOST/?url=/teacher_signup -d username=teacher\
+    if ! (curl $TAMNZA_HOST/?url=/teacher_signup -d username=teacher\
      -d password1=teacher -d password2=teacher -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && ! grep '^Location: ?url=/error' < $HEADER); then
@@ -176,7 +175,7 @@ test_signup_teacher() {
     fi
 
     # Username already used
-    if ! (curl $HOST/?url=/teacher_signup -d username=teacher\
+    if ! (curl $TAMNZA_HOST/?url=/teacher_signup -d username=teacher\
      -d password1=teacher -d password2=teacher -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
@@ -195,7 +194,7 @@ test_signup_teacher() {
 #   None
 #######################################
 test_signup_student() {
-    header=$(curl -I $HOST/?url=/student_signup -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/student_signup -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -206,7 +205,7 @@ test_signup_student() {
     # We load subjects
     subjects=''
 
-    for subject in $(curl --url $HOST/?url=/student_signup -s --show-error\
+    for subject in $(curl --url $TAMNZA_HOST/?url=/student_signup -s --show-error\
      | grep 'form-check-input'\
      | sed 's/.*value="//'\
      | sed 's/".*//'); do
@@ -214,7 +213,7 @@ test_signup_student() {
     done
     
     # Both password don't match
-    if ! (curl $HOST/?url=/student_signup -d username=student\
+    if ! (curl $TAMNZA_HOST/?url=/student_signup -d username=student\
      -d password1=student -d password2=wrong --data-raw "${subjects}"\
      -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
@@ -224,7 +223,7 @@ test_signup_student() {
     fi
     
     # Success
-    if ! (curl $HOST/?url=/student_signup -d username=student\
+    if ! (curl $TAMNZA_HOST/?url=/student_signup -d username=student\
      -d password1=student -d password2=student --data-raw "${subjects}"\
      -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
@@ -235,7 +234,7 @@ test_signup_student() {
     fi
 
     # Username already used
-    if ! (curl $HOST/?url=/student_signup -d username=student\
+    if ! (curl $TAMNZA_HOST/?url=/student_signup -d username=student\
      -d password1=student -d password2=student --data-raw "${subjects}"\
      -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
@@ -255,7 +254,7 @@ test_signup_student() {
 #   None
 #######################################
 test_login() {
-    header=$(curl -I $HOST/?url=/login -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/login -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -264,7 +263,7 @@ test_login() {
     fi
 
     # Wrong data
-    if ! (curl $HOST/?url=/login -d username=student\
+    if ! (curl $TAMNZA_HOST/?url=/login -d username=student\
      -d password=wrong -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
@@ -284,7 +283,7 @@ test_login() {
 #   None
 #######################################
 test_login_teacher() {
-    if ! (curl $HOST/?url=/login --cookie-jar $TEACHER_COOKIE_JAR -d username=teacher\
+    if ! (curl $TAMNZA_HOST/?url=/login --cookie-jar $TEACHER_COOKIE_JAR -d username=teacher\
      -d password=teacher -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && ! grep '^Location: ?url=/error' < $HEADER); then
@@ -294,7 +293,7 @@ test_login_teacher() {
     fi
 
     # We verify the home redirection
-    header=$(curl -I $HOST --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -314,7 +313,7 @@ test_login_teacher() {
 #   None
 #######################################
 test_login_student() {
-    if ! (curl $HOST/?url=/login --cookie-jar $STUDENT_COOKIE_JAR -d username=student\
+    if ! (curl $TAMNZA_HOST/?url=/login --cookie-jar $STUDENT_COOKIE_JAR -d username=student\
      -d password=student -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && ! grep '^Location: ?url=/error' < $HEADER); then
@@ -324,7 +323,7 @@ test_login_student() {
     fi
 
     # We verify the login
-    header=$(curl -I $HOST --cookie $STUDENT_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST --cookie $STUDENT_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -342,14 +341,14 @@ test_login_student() {
 #   None
 #######################################
 test_teacher_home_without_quiz() {
-    if (curl $HOST?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
+    if (curl $TAMNZA_HOST?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '?url=/teacher/quiz/[0-9]*/change'); then
         return 1
     fi
 }
 
 test_teacher_home_with_quiz() {
-    if ! (curl $HOST?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
+    if ! (curl $TAMNZA_HOST?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '?url=/teacher/quiz/[0-9]*/change'); then
         return 1
     fi
@@ -366,7 +365,7 @@ test_teacher_home_with_quiz() {
 #   None | String
 #######################################
 get_subject() {
-    curl $HOST/?url=/teacher/quiz/add --cookie $TEACHER_COOKIE_JAR -s --show-error\
+    curl $TAMNZA_HOST/?url=/teacher/quiz/add --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | sort\
      | grep '<option.*</option>' -o -m 1\
      | sed 's/.*="//'\
@@ -384,7 +383,7 @@ get_subject() {
 #   None
 #######################################
 test_add_quiz() {
-    header=$(curl -I $HOST/?url=/teacher/quiz/add --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/add --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -393,7 +392,7 @@ test_add_quiz() {
     fi
 
     # Wrong data
-    if ! (curl $HOST/?url=/teacher/quiz/add -d name -d subject\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/add -d name -d subject\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
@@ -405,7 +404,7 @@ test_add_quiz() {
     subject=$(get_subject)
 
     # Success
-    if ! (curl $HOST/?url=/teacher/quiz/add -d name=quiz -d subject=$subject\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/add -d name=quiz -d subject=$subject\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher/quiz/[0-9]*/change' < $HEADER); then
@@ -426,7 +425,7 @@ test_add_quiz() {
 #   None | String
 #######################################
 get_quiz() {
-    curl $HOST/?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
+    curl $TAMNZA_HOST/?url=/teacher --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '?url=/teacher/quiz/[0-9]*/change' -o -m 1\
      | sed 's/.*z\///'\
      | sed 's/\/.*//'
@@ -450,7 +449,7 @@ test_change_quiz() {
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/change --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/$quiz/change --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -459,7 +458,7 @@ test_change_quiz() {
     fi
 
     # Wrong data
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/change -d name -d subject\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/change -d name -d subject\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
@@ -468,7 +467,7 @@ test_change_quiz() {
     fi
 
     # Success
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/change -d name=quiz -d subject=$subject\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/change -d name=quiz -d subject=$subject\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher/quiz/[0-9]*/change' < $HEADER); then
@@ -494,7 +493,7 @@ test_quiz_result_without_respondents() {
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -502,7 +501,7 @@ test_quiz_result_without_respondents() {
         return 2
     fi
 
-    if ! (curl $HOST?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error\
+    if ! (curl $TAMNZA_HOST?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '<strong>0</strong>'); then
         return 3
     fi
@@ -516,7 +515,7 @@ test_quiz_result_with_respondents() {
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -524,7 +523,7 @@ test_quiz_result_with_respondents() {
         return 2
     fi
 
-    if (curl $HOST?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error\
+    if (curl $TAMNZA_HOST?url=/teacher/quiz/$quiz/results --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep '<strong>0</strong>'); then
         return 3
     fi
@@ -548,7 +547,7 @@ test_delete_quiz() {
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/delete --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/$quiz/delete --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -556,7 +555,7 @@ test_delete_quiz() {
         return 2
     fi
 
-    if ! (curl $HOST?url=/teacher/quiz/$quiz/delete --data-raw 'null'\
+    if ! (curl $TAMNZA_HOST?url=/teacher/quiz/$quiz/delete --data-raw 'null'\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher' < $HEADER); then
@@ -584,7 +583,7 @@ test_add_question() {
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/question/add --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/add --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -593,7 +592,7 @@ test_add_question() {
     fi
 
     # Wrong data
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/add -d text\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/add -d text\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
@@ -602,7 +601,7 @@ test_add_question() {
     fi
 
     # Success
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/add -d text=text\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/add -d text=text\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher/quiz/[0-9]*/question/[0-9]*' < $HEADER); then
@@ -623,7 +622,7 @@ test_add_question() {
 #   None | String
 #######################################
 get_question() {
-    curl $HOST/?url=/teacher/quiz/$quiz/change --cookie $TEACHER_COOKIE_JAR -s --show-error\
+    curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/change --cookie $TEACHER_COOKIE_JAR -s --show-error\
      | grep "?url=/teacher/quiz/$quiz/question/[0-9]*" -o -m 1\
      | sed 's/.*n\///'
 }
@@ -653,7 +652,7 @@ test_change_question() {
         return 2
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/question/$question --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -662,7 +661,7 @@ test_change_question() {
     fi
 
     # Wrong data
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question -d text\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question -d text\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
         cat $HEADER
@@ -671,7 +670,7 @@ test_change_question() {
     fi
 
     # 1 answer left
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question\
      -d text=text --data-raw 'answer-ids[]=-1' -d answer--1-text=answer-1\
      -d answer--1-is_correct=on --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 200' < $HEADER); then
@@ -681,7 +680,7 @@ test_change_question() {
     fi
 
     # no correct answer
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question\
      -d text=text --data-raw 'answer-ids[]=-1&answer-ids[]=-2'\
      -d answer--1-text=answer-1 -d answer--2-text=answer-2\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
@@ -692,7 +691,7 @@ test_change_question() {
     fi
 
     # success
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question\
      -d text=text --data-raw 'answer-ids[]=-1&answer-ids[]=-2&answer-ids[]=-3'\
      -d answer--1-text=answer-1 -d answer--2-text=answer-2 -d answer--3-text=answer-3\
      -d answer--1-is_correct=on -d answer--3-is_correct=on\
@@ -705,7 +704,7 @@ test_change_question() {
     fi
 
     # we delete 1 answer
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question\
      -d text=text --data-raw 'answer-ids[]=1&answer-ids[]=2'\
      -d answer-1-text=answer-1 -d answer-2-text=answer-2\
      -d answer-1-is_correct=on -d answer-3-to-delete=on\
@@ -743,7 +742,7 @@ test_delete_question() {
         return 2
     fi
 
-    header=$(curl -I $HOST/?url=/teacher/quiz/$quiz/question/$question/delete --cookie $TEACHER_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question/delete --cookie $TEACHER_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -751,7 +750,7 @@ test_delete_question() {
         return 3
     fi
 
-    if ! (curl $HOST/?url=/teacher/quiz/$quiz/question/$question/delete --data-raw 'null'\
+    if ! (curl $TAMNZA_HOST/?url=/teacher/quiz/$quiz/question/$question/delete --data-raw 'null'\
      --cookie $TEACHER_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/teacher/quiz/[0-9]*/change' < $HEADER); then
@@ -770,14 +769,14 @@ test_delete_question() {
 #   None
 #######################################
 test_student_home_without_quiz() {
-    if (curl $HOST?url=/student --cookie $STUDENT_COOKIE_JAR -s --show-error\
+    if (curl $TAMNZA_HOST?url=/student --cookie $STUDENT_COOKIE_JAR -s --show-error\
      | grep '?url=/student/quiz/[0-9]*'); then
         return 1
     fi
 }
 
 test_student_home_with_quiz() {
-    if ! (curl $HOST?url=/student --cookie $STUDENT_COOKIE_JAR -s --show-error\
+    if ! (curl $TAMNZA_HOST?url=/student --cookie $STUDENT_COOKIE_JAR -s --show-error\
      | grep '?url=/student/quiz/[0-9]*'); then
         return 1
     fi
@@ -795,7 +794,7 @@ test_student_home_with_quiz() {
 #######################################
 
 test_update_interests() {
-    header=$(curl -I $HOST/?url=/student/interests --cookie $STUDENT_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/student/interests --cookie $STUDENT_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -803,7 +802,7 @@ test_update_interests() {
         return 1
     fi
 
-    if ! (curl $HOST/?url=/student/interests --data-raw "interests[]=$(get_subject)"\
+    if ! (curl $TAMNZA_HOST/?url=/student/interests --data-raw "interests[]=$(get_subject)"\
      --cookie $STUDENT_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/student' < $HEADER); then
@@ -822,7 +821,7 @@ test_update_interests() {
 #   None
 #######################################
 test_taken_quiz_without_quiz() {
-    header=$(curl -I $HOST/?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -830,14 +829,14 @@ test_taken_quiz_without_quiz() {
         return 1
     fi
 
-    if (curl $HOST?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error\
+    if (curl $TAMNZA_HOST?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error\
      | grep '<td>[0-9]*</td>'); then
         return 2
     fi
 }
 
 test_taken_quiz_with_quiz() {
-    header=$(curl -I $HOST/?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -845,7 +844,7 @@ test_taken_quiz_with_quiz() {
         return 1
     fi
 
-    if ! (curl $HOST?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error\
+    if ! (curl $TAMNZA_HOST?url=/student/taken --cookie $STUDENT_COOKIE_JAR -s --show-error\
      | grep '<td>[0-9]*</td>'); then
         return 2
     fi
@@ -866,7 +865,7 @@ test_take_quiz_invalid() {
         return 1
     fi
 
-    if ! (curl $HOST/?url=/student/quiz/$quiz\
+    if ! (curl $TAMNZA_HOST/?url=/student/quiz/$quiz\
      --cookie $STUDENT_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT\
       && grep '^HTTP/1.1 301' < $HEADER\
       && grep '^Location: ?url=/student' < $HEADER); then
@@ -883,7 +882,7 @@ test_take_quiz_valid() {
         return 1
     fi
 
-    header=$(curl -I $HOST/?url=/student/quiz/$quiz --cookie $STUDENT_COOKIE_JAR -s --show-error)
+    header=$(curl -I $TAMNZA_HOST/?url=/student/quiz/$quiz --cookie $STUDENT_COOKIE_JAR -s --show-error)
     echo '--- HEADER ---'
     echo "$header";
     echo '--------------'
@@ -893,14 +892,14 @@ test_take_quiz_valid() {
 
     # We answer all the questions
     while true; do
-        output=$(curl $HOST/?url=/student/quiz/$quiz \
+        output=$(curl $TAMNZA_HOST/?url=/student/quiz/$quiz \
          --cookie $STUDENT_COOKIE_JAR -s --show-error)
         # We get an answer
         answer=$(grep 'form-check-input' -m 1 <<< $output\
          | sed 's/.*value="//'\
          | sed 's/".*//')
 
-        if ! (curl $HOST/?url=/student/quiz/$quiz -d answer=$answer \
+        if ! (curl $TAMNZA_HOST/?url=/student/quiz/$quiz -d answer=$answer \
          --cookie $STUDENT_COOKIE_JAR -s --show-error -D $HEADER &> $OUTPUT); then
             cat $HEADER
             cat $OUTPUT
