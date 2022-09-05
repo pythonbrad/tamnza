@@ -55,10 +55,9 @@ jobs:
     - name: Run backend test
       run: ./test.sh
 
-    - name: Clean the database and load dummy data
+    - name: Clean the database
       run: |
         php ./tamnza/tamnza/initdb.php
-        php ./tamnza/tamnza/initdummydata.php
 
     - name: Run frontend test
       run: ./test2.sh

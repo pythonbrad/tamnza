@@ -4,9 +4,11 @@
 	This script permit to load some dummy data to permit to fast test the application
 */
 
-require 'autoloader.php';
+namespace Tamnza\App\Classroom;
 
-$db = new Tamnza\Database\BaseDAO('', '', []);
+use Tamnza\Database;
+
+$db = new Database\BaseDAO('', '', []);
 
 $db->exec("
 INSERT INTO classroom_subject (id, name, color) VALUES (null, \"Nufi\", \"green\");
