@@ -1,9 +1,9 @@
 on:
 
   push:
-  
-  schedule:
-    - cron: "*/5 * * * *"
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 name: CI
 
@@ -24,7 +24,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: tamnza
