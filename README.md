@@ -64,4 +64,4 @@ Our docker image is available on [Docker Hub](https://hub.docker.com/r/pythonbra
 ![Overview](https://github.com/pythonbrad/tamnza/blob/main/overview.png)
 
 ## License
-
+This project is licensed under the terms of the MIT license.
